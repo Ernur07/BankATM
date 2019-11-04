@@ -1,5 +1,5 @@
-import Entities.Bank;
-import Entities.Client;
+//import Entities.Bank;
+//import Entities.Client;
 
 import javax.swing.*;
 import java.awt.*;
@@ -45,77 +45,10 @@ public class SecurityAccountPage {
         j.setLayout(new GridBagLayout());
         j.setTitle("ATM");
         j.setSize(900, 600);
-        j.setVisible(true);
-
-        buy.setFont(font);
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.weightx = 0.5;
-        c.weighty = 0.5;
-        c.gridx = 5;
-        c.gridy = 0;
-        c.insets = new Insets(0,0,0,30);
-        j.add(buy, c);
-
-        buyAmount.setFont(font);
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.weightx = 0.5;
-        c.weighty = 0.5;
-        c.gridx = 4;
-        c.gridy = 0;
-        c.insets = new Insets(0,0,0,30);
-        j.add(buyAmount, c);
-
-
-//        report.setFont(new Font("Noto Sans",1,20));
-//        report.setHorizontalAlignment(JLabel.CENTER);
-//        c.fill = GridBagConstraints.HORIZONTAL;
-//        c.weightx = 0.2;
-//        c.weighty = 0.5;
-//        c.gridx = 3;
-//        c.gridy = 0;
-//        j.add(report, c);
-
-        fromBox.setFont(new Font("Noto Sans",1,20));
-        //fromBox.setHorizontalAlignment(JLabel.CENTER);
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.weightx = 0.5;
-        c.weighty = 0.5;
-        c.gridx = 3;
-        c.gridy = 0;
-        j.add(fromBox, c);
 
 
 
-        sell.setFont(font);
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.weightx = 0.5;
-        c.weighty = 0.5;
-        c.gridx = 5;
-        c.gridy = 1;
-        c.insets = new Insets(0,0,0,30);
-        j.add(sell, c);
-
-        sellAmount.setFont(font);
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.weightx = 0.5;
-        c.weighty = 0.5;
-        c.gridx = 4;
-        c.gridy = 1;
-        c.insets = new Insets(0,0,0,30);
-        j.add(sellAmount, c);
-
-        fromBox2.setFont(new Font("Noto Sans",1,20));
-        //fromBox.setHorizontalAlignment(JLabel.CENTER);
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.weightx = 0.5;
-        c.weighty = 0.5;
-        c.gridx = 3;
-        c.gridy = 1;
-        j.add(fromBox2, c);
-
-
-
-        //area.setText(bankATM.log);
+        //     area.setText(bankATM.log);
         area.setEditable(false);
         area.setFont(font);
         sp.setPreferredSize(new Dimension(150, 250));
@@ -124,18 +57,17 @@ public class SecurityAccountPage {
         c.weightx = 0.5;
         c.weighty = 0.5;
         c.gridwidth = 3;
+        c.gridheight = 3;
         c.gridx = 0;
         c.gridy = 0;
         j.add(sp, c);
-
-
-
 
 //        for (int i = 0; i < bankATM.getCustomers().size(); i++) {
 //            Customer customer = bankATM.getCustomers().get(i);
 //            listModel.addElement(String.valueOf(i+1) + " customer name: " + customer.getName() + "accounts: " + customer.listAccounts());
 //        }
 
+        listModel.addElement("temp");
         sourceList.setModel(listModel);
         sourceList.setFont(font);
         sourceList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -147,30 +79,82 @@ public class SecurityAccountPage {
         c.weightx = 1;
         c.weighty = 1;
         c.gridwidth = 3;
+        c.gridheight = 3;
         c.gridx = 0;
-        c.gridy = 1;
+        c.gridy = 3;
         j.add(sourceListScroller, c);
 
+        fromBox.setFont(new Font("Noto Sans",1,20));
+        //fromBox.setHorizontalAlignment(JLabel.CENTER);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weightx = 0;
+        c.weighty = 1;
+        c.gridx = 4;
+        c.gridy = 0;
+        c.gridwidth = 2;
+        c.gridheight = 1;
+        j.add(fromBox, c);
 
-//        view.setFont(new Font("Noto Sans",1,20));
-//        c.weightx = 0.5;
-//        c.weighty = 0.5;
-//        c.fill = GridBagConstraints.HORIZONTAL;
-//        c.gridwidth = 1;
-//        c.gridx = 3;
-//        c.gridy = 1;
-//        j.add(view, c);
+        buyAmount.setFont(font);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weighty = 1;
+        c.gridx = 4;
+        c.gridy = 1;
+        c.gridwidth = 2;
+        c.gridheight = 1;
+        j.add(buyAmount, c);
 
+        buy.setFont(font);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weighty = 1;
+        c.gridx = 4;
+        c.gridy = 2;
+        c.gridwidth = 2;
+        c.gridheight = 1;
+        j.add(buy, c);
+
+
+
+        fromBox2.setFont(new Font("Noto Sans",1,20));
+//        fromBox.setHorizontalAlignment(JLabel.CENTER);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weightx = 0;
+        c.weighty = 1;
+        c.gridx = 4;
+        c.gridy = 3;
+        c.gridwidth = 2;
+        c.gridheight = 1;
+        j.add(fromBox2, c);
+
+        sellAmount.setFont(font);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weighty = 1;
+        c.gridx = 4;
+        c.gridy = 4;
+        c.gridwidth = 2;
+        c.gridheight = 1;
+        j.add(sellAmount, c);
+
+        sell.setFont(font);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weighty = 1;
+        c.gridx = 4;
+        c.gridy = 5;
+        c.gridwidth = 2;
+        c.gridheight = 1;
+        j.add(sell, c);
 
         exit.setFont(new Font("Noto Sans",1,20));
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 0.5;
         c.weighty = 0.5;
         c.gridwidth = 1;
-        c.gridx = 3;
-        c.gridy = 2;
+        c.gridx = 5;
+        c.gridy = 7;
         j.add(exit, c);
         listModel.setSize(6);
+        j.setVisible(true);
+
     }
 
     public static void main(String[] args) {
