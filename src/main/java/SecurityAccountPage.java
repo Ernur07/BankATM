@@ -31,9 +31,6 @@ public class SecurityAccountPage {
     JTextArea area = new JTextArea("Report");
     JScrollPane sp = new JScrollPane(area);
 
-    JTable stockTable;
-    JScrollPane stockSp;
-
 
 
 
@@ -52,39 +49,10 @@ public class SecurityAccountPage {
 
 
         //     area.setText(bankATM.log);
-//        area.setEditable(false);
-//        area.setFont(font);
-//        sp.setPreferredSize(new Dimension(150, 250));
-//        sp.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-//        c.fill = GridBagConstraints.HORIZONTAL;
-//        c.weightx = 0.5;
-//        c.weighty = 0.5;
-//        c.gridwidth = 3;
-//        c.gridheight = 3;
-//        c.gridx = 0;
-//        c.gridy = 0;
-//        j.add(sp, c);
-
-
-        String[][] data = {
-                { "Apple", "AAPL", "255.82" },
-                { "Tencent", "TCEHY", "41.09" },
-                { "Alibaba", "BABA", "176.46" },
-                { "Google", "GOOGL", "1272.50" },
-                { "Uber", "UBER", "31.37" },
-                { "Microsoft", "MSFT", "143.72" },
-        };
-
-        // Column Names
-        String[] columnNames = { "Company", "Code", "Price" };
-
-        //StockTableModel stockTableModel = new StockTableModel();
-
-        stockTable = new JTable(data, columnNames);
-        stockTable.setAutoCreateRowSorter(true);
-        stockSp = new JScrollPane(stockTable);
-        stockSp.setPreferredSize(new Dimension(150, 250));
-        stockSp.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        area.setEditable(false);
+        area.setFont(font);
+        sp.setPreferredSize(new Dimension(150, 250));
+        sp.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 0.5;
         c.weighty = 0.5;
@@ -92,23 +60,7 @@ public class SecurityAccountPage {
         c.gridheight = 3;
         c.gridx = 0;
         c.gridy = 0;
-        j.add(stockSp, c);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        j.add(sp, c);
 
 //        for (int i = 0; i < bankATM.getCustomers().size(); i++) {
 //            Customer customer = bankATM.getCustomers().get(i);
@@ -201,9 +153,6 @@ public class SecurityAccountPage {
         c.gridy = 7;
         j.add(exit, c);
         listModel.setSize(6);
-
-
-
         j.setVisible(true);
 
     }
