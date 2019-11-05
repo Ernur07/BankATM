@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="BankAtm" uuid="623e2b41-3c7e-499a-8207-0a2dbd3623ba">
+      <driver-ref>9cf83d77-dcbe-410a-a4f4-c04cf4d186f9</driver-ref>
+      <synchronize>true</synchronize>
+      <configured-by-url>true</configured-by-url>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5432/BankAtm</jdbc-url>
+    </data-source>
+  </component>
+</project>
