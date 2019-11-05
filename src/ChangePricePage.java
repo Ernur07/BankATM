@@ -3,6 +3,7 @@ import Entities.*;
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 
@@ -34,22 +35,9 @@ public class ChangePricePage extends JFrame {
         submit = new JButton("Submit");
         back = new JButton("Back");
 
-        // Data to be displayed in the JTable
-        String[][] data = {
-                { "Apple", "AAPL", "255.82" },
-                { "Tencent", "TCEHY", "41.09" },
-                { "Alibaba", "BABA", "176.46" },
-                { "Google", "GOOGL", "1272.50" },
-                { "Uber", "UBER", "31.37" },
-                { "Microsoft", "MSFT", "143.72" },
-        };
+        StockTableModel stockTableModel = new StockTableModel();
 
-        // Column Names
-        String[] columnNames = { "Company", "Code", "Price" };
-
-        //StockTableModel stockTableModel = new StockTableModel();
-
-        stockTable = new JTable(data, columnNames);
+        stockTable = new JTable(stockTableModel);
         stockTable.setAutoCreateRowSorter(true);
         sp = new JScrollPane(stockTable);
 
@@ -84,6 +72,39 @@ public class ChangePricePage extends JFrame {
         setLocation(200,100);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
+
+        back.addActionListener(e -> {
+            setVisible(false);
+        });
+
+        submit.addActionListener(e -> {
+            if (stockTable.getSelectedRow() == -1) {
+                JOptionPane.showMessageDialog(null,
+                        "No item selected",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                String value = priceText.getText();
+                if (!isNumeric(value)) {
+                    JOptionPane.showMessageDialog(null,
+                            "Input should be numbers!",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    stockTable.getModel().setValueAt(value, stockTable.getSelectedRow(), 2);
+                    //refresh the JTable
+                    stockTable.repaint();
+                }
+            }
+        });
+    }
+
+    private boolean isNumeric(String str) {
+        String bigStr;
+        try {
+            bigStr = new BigDecimal(str).toString();
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 
     public class StockTableModel extends AbstractTableModel {
@@ -92,6 +113,9 @@ public class ChangePricePage extends JFrame {
                 { "Apple", "AAPL", "255.82" },
                 { "Tencent", "TCEHY", "41.09" },
                 { "Alibaba", "BABA", "176.46" },
+                { "Google", "GOOGL", "1272.50" },
+                { "Uber", "UBER", "31.37" },
+                { "Microsoft", "MSFT", "143.72" },
         };
 
 
@@ -108,6 +132,11 @@ public class ChangePricePage extends JFrame {
         @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
             return data[rowIndex][columnIndex];
+        }
+
+        @Override
+        public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+            data[rowIndex][columnIndex] = (String) aValue;
         }
 
         public String getColumnName(int col){
