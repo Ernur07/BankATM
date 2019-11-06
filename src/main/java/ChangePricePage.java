@@ -83,13 +83,13 @@ public class ChangePricePage extends JFrame {
                         "Error", JOptionPane.ERROR_MESSAGE);
             } else {
                 String value = priceText.getText();
-                double doubleValue = Double.valueOf(value);
-                value = Double.toString(doubleValue);
                 if (!isNumeric(value)) {
                     JOptionPane.showMessageDialog(null,
                             "Input should be numbers!",
                             "Error", JOptionPane.ERROR_MESSAGE);
                 } else {
+                    double doubleValue = Double.valueOf(value);
+                    value = Double.toString(doubleValue);
                     stockTable.getModel().setValueAt(value, stockTable.getSelectedRow(), 2);
                     //refresh the JTable
                     stockTable.repaint();
