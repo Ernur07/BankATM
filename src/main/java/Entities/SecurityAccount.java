@@ -1,21 +1,31 @@
 package Entities;
 
+import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.List;
 
+@Entity
+@DiscriminatorValue("security")
 public class SecurityAccount extends Account {
 
     private static final double minimumBalance = 100000;
-    private ArrayList<Shares> shares;
+
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "security_account_id")
+    private List<PrivateShares> shares;
 
     public SecurityAccount(String name, int balance, String c, Client owner) {
         super(name, balance, c,owner);
+        shares = new ArrayList<PrivateShares>();
     }
 
-    public ArrayList<Shares> getShares() {
+    public SecurityAccount() {}
+
+    public List<PrivateShares> getShares() {
         return shares;
     }
 
-    public void setShares(ArrayList<Shares> shares) {
+    public void setShares(List<PrivateShares> shares) {
         this.shares = shares;
     }
 }

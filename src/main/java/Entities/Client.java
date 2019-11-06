@@ -19,6 +19,9 @@ public class Client extends BankUser{
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id")
     private List<Loan> loans;
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "client_id")
+    private List<SecurityAccount> securityAccounts;
     /**
      * This attributes saves account opening and closing fees for each client
      */
@@ -30,6 +33,7 @@ public class Client extends BankUser{
         this.checkingAccounts = new ArrayList<CheckingAccount>();
         this.savingAccounts = new ArrayList<SavingAccount>();
         this.loans = new ArrayList<Loan>();
+        this.securityAccounts = new ArrayList<SecurityAccount>();
     }
 
     public List<CheckingAccount> getCheckingAccounts() {

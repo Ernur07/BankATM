@@ -60,6 +60,24 @@ public class DatabaseManager {
         em.getTransaction().commit();
         return result;
     }
+    public SecurityAccount findSecurityAccount(Integer id){
+        em.getTransaction().begin();
+        SecurityAccount result = em.find(SecurityAccount.class,id);
+        em.getTransaction().commit();
+        return result;
+    }
+    public Shares findShares(Integer id){
+        em.getTransaction().begin();
+        Shares result = em.find(Shares.class,id);
+        em.getTransaction().commit();
+        return result;
+    }
+    public PrivateShares findPrivateShares(Integer id){
+        em.getTransaction().begin();
+        PrivateShares result = em.find(PrivateShares.class,id);
+        em.getTransaction().commit();
+        return result;
+    }
     public Loan findLoan(Integer id){
         em.getTransaction().begin();
         Loan result = em.find(Loan.class,id);
@@ -95,6 +113,16 @@ public class DatabaseManager {
         em.getTransaction().commit();
         return result;
     }
+    public List<SecurityAccount> getSecurityAccount(Client client){
+        em.getTransaction().begin();
+        List<Integer> resultList = (List<Integer>) em.createNativeQuery("SELECT id FROM account WHERE client_id="+client.getId()+" AND account_type = security");
+        ArrayList<SecurityAccount> result = new ArrayList<>();
+        for(int id: resultList) {
+            result.add(findSecurityAccount(id));
+        }
+        em.getTransaction().commit();
+        return result;
+    }
     public List<Loan> getLoans(Client client){
         em.getTransaction().begin();
         List<Integer> resultList = (List<Integer>) em.createNativeQuery("SELECT id FROM loan WHERE client_id="+client.getId());
@@ -108,6 +136,16 @@ public class DatabaseManager {
     public List<Loan> getTransactions(Account account){
         em.getTransaction().begin();
         List<Integer> resultList = (List<Integer>) em.createNativeQuery("SELECT id FROM transactions WHERE sender_account_id="+account.getId());
+        ArrayList<Loan> result = new ArrayList<>();
+        for(int id: resultList) {
+            result.add(findLoan(id));
+        }
+        em.getTransaction().commit();
+        return result;
+    }
+    public List<Loan> getPrivateShares(Account account){
+        em.getTransaction().begin();
+        List<Integer> resultList = (List<Integer>) em.createNativeQuery("SELECT id FROM privateshares WHERE security_account_id="+account.getId());
         ArrayList<Loan> result = new ArrayList<>();
         for(int id: resultList) {
             result.add(findLoan(id));
@@ -152,6 +190,38 @@ public class DatabaseManager {
         ArrayList<Loan> result = new ArrayList<>();
         for(int id: resultList) {
             result.add(findLoan(id));
+        }
+        em.getTransaction().commit();
+        return result;
+    }
+
+    public List<Shares> getAllShares(){
+        em.getTransaction().begin();
+        List<Integer> resultList = (List<Integer>) em.createNativeQuery("SELECT id FROM shares");
+        ArrayList<Shares> result = new ArrayList<>();
+        for(int id: resultList) {
+            result.add(findShares(id));
+        }
+        em.getTransaction().commit();
+        return result;
+    }
+    public List<PrivateShares> getAllPrivateShares(){
+        em.getTransaction().begin();
+        List<Integer> resultList = (List<Integer>) em.createNativeQuery("SELECT id FROM privateshares");
+        ArrayList<PrivateShares> result = new ArrayList<>();
+        for(int id: resultList) {
+            result.add(findPrivateShares(id));
+        }
+        em.getTransaction().commit();
+        return result;
+    }
+
+    public List<SecurityAccount> getAllSecurityAccount(){
+        em.getTransaction().begin();
+        List<Integer> resultList = (List<Integer>) em.createNativeQuery("SELECT id FROM account WHERE account_type = security");
+        ArrayList<SecurityAccount> result = new ArrayList<>();
+        for(int id: resultList) {
+            result.add(findSecurityAccount(id));
         }
         em.getTransaction().commit();
         return result;

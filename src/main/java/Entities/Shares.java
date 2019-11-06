@@ -1,48 +1,57 @@
 package Entities;
 
+import javax.persistence.*;
+
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Shares {
 
-    protected String CompanyName;
-    protected String Tickr;
-    protected double SharePrice;
-    protected double AmountofShares;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    private String companyName;
+    private String tickr;
+    private double sharePrice;
+    private double amountOfShares;
 
     public Shares(String companyName, String tickr, double sharePrice, double amountofShares) {
-        CompanyName = companyName;
-        Tickr = tickr;
-        SharePrice = sharePrice;
-        AmountofShares = amountofShares;
+        this.companyName = companyName;
+        this.tickr = tickr;
+        this.sharePrice = sharePrice;
+        this.amountOfShares = amountofShares;
     }
 
+    public Shares() {}
+
     public String getCompanyName() {
-        return CompanyName;
+        return this.companyName;
     }
 
     public void setCompanyName(String companyName) {
-        CompanyName = companyName;
+        this.companyName = companyName;
     }
 
     public String getTickr() {
-        return Tickr;
+        return this.tickr;
     }
 
     public void setTickr(String tickr) {
-        Tickr = tickr;
+        this.tickr = tickr;
     }
 
     public double getSharePrice() {
-        return SharePrice;
+        return this.sharePrice;
     }
 
     public void setSharePrice(double sharePrice) {
-        SharePrice = sharePrice;
+        this.sharePrice = sharePrice;
     }
 
     public double getAmountofShares() {
-        return AmountofShares;
+        return this.amountOfShares;
     }
 
     public void setAmountofShares(double amountofShares) {
-        AmountofShares = amountofShares;
+        this.amountOfShares = amountofShares;
     }
 }
