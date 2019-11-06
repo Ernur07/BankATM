@@ -1,5 +1,4 @@
 import Entities.*;
-
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
@@ -84,6 +83,8 @@ public class ChangePricePage extends JFrame {
                         "Error", JOptionPane.ERROR_MESSAGE);
             } else {
                 String value = priceText.getText();
+                double doubleValue = Double.valueOf(value);
+                value = Double.toString(doubleValue);
                 if (!isNumeric(value)) {
                     JOptionPane.showMessageDialog(null,
                             "Input should be numbers!",
@@ -92,6 +93,8 @@ public class ChangePricePage extends JFrame {
                     stockTable.getModel().setValueAt(value, stockTable.getSelectedRow(), 2);
                     //refresh the JTable
                     stockTable.repaint();
+                    JOptionPane.showMessageDialog(null, "Success! " +
+                            "Change the price to " + value);
                 }
             }
         });

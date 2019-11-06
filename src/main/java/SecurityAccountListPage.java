@@ -29,7 +29,7 @@ public class SecurityAccountListPage extends JFrame{
          */
         JPanel securityAccountPanel = new JPanel();
         securityAccountPanel.setLayout(new BoxLayout(securityAccountPanel,BoxLayout.Y_AXIS));
-        SavingAccountTableModel tm = new SavingAccountTableModel(client.getSavingAccounts());
+        SavingAccountTableModel tm = new SavingAccountTableModel((ArrayList<SavingAccount>) client.getSavingAccounts());
         JTable savingTable = new JTable(tm);
         add(savingTable);
         savingTable.setAutoCreateRowSorter(true);
