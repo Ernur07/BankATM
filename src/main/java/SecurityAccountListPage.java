@@ -10,7 +10,6 @@ public class SecurityAccountListPage extends JFrame{
     private Client client;
 
     public SecurityAccountListPage(){//Client client){
-        this.client = new Client("a","b","c");
 
 
         setLayout(new GridLayout(3,1));

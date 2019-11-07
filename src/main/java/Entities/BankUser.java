@@ -16,12 +16,14 @@ public abstract class BankUser {
     private String firstname;
     private String surname;
     private String login;
+    private String password;
 
     public BankUser(){}
-    public BankUser(String firstname, String surname, String login) {
+    public BankUser(String firstname, String surname, String login,String password) {
         this.firstname = firstname;
         this.surname = surname;
         this.login = login;
+        this.password = password;
     }
 
     public String getFirstname() {
@@ -54,6 +56,14 @@ public abstract class BankUser {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override

@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class Main {
     public static void main(String[] args) {
-        Manager manager = new Manager("bank","manager","manager");
+        Manager manager = new Manager("bank","manager","manager","admin");
         Bank bank=new Bank(manager,new ArrayList<Client>());
 
         OpeningMenu menu = new OpeningMenu(bank);

@@ -11,7 +11,7 @@ import javax.persistence.Entity;
 @DiscriminatorValue("manager")
 public class Manager extends BankUser{
     public Manager(){}
-    public Manager(String firstname, String surname, String login) {
-        super(firstname, surname,login);
+    public Manager(String firstname, String surname, String login,String password) {
+        super(firstname, surname,login,password);
     }
 }

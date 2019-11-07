@@ -6,6 +6,7 @@ import Entities.*;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,9 +96,11 @@ public class DatabaseManager {
 
     public List<SavingAccount> getSavingAccounts(Client client){
         em.getTransaction().begin();
-        List<Integer> resultList = (List<Integer>) em.createNativeQuery("SELECT id FROM account WHERE client_id="+client.getId()+" AND account_type = saving");
+        Query q = em.createNativeQuery("SELECT id FROM account WHERE client_id = ? and account_type= ?");
+        q.setParameter(1,client.getId()).setParameter(2,"saving");
+        List<Integer> resultList = q.getResultList();
         ArrayList<SavingAccount> result = new ArrayList<>();
-        for(int id: resultList) {
+        for(Integer id: resultList) {
             result.add(findSavingAccount(id));
         }
         em.getTransaction().commit();
@@ -105,7 +108,9 @@ public class DatabaseManager {
     }
     public List<CheckingAccount> getCheckingAccounts(Client client){
         em.getTransaction().begin();
-        List<Integer> resultList = (List<Integer>) em.createNativeQuery("SELECT id FROM account WHERE client_id="+client.getId()+" AND account_type = checking");
+        Query q = em.createNativeQuery("SELECT id FROM account WHERE client_id= ? AND account_type = ?");
+        q.setParameter(1,client.getId()).setParameter(2,"checking");
+        List<Integer> resultList = q.getResultList();
         ArrayList<CheckingAccount> result = new ArrayList<>();
         for(int id: resultList) {
             result.add(findCheckingAccount(id));
@@ -115,7 +120,9 @@ public class DatabaseManager {
     }
     public List<SecurityAccount> getSecurityAccount(Client client){
         em.getTransaction().begin();
-        List<Integer> resultList = (List<Integer>) em.createNativeQuery("SELECT id FROM account WHERE client_id="+client.getId()+" AND account_type = security");
+        Query q = em.createNativeQuery("SELECT id FROM account WHERE client_id= ? AND account_type = ?");
+        q.setParameter(1,client.getId()).setParameter(2,"security");
+        List<Integer> resultList = q.getResultList();
         ArrayList<SecurityAccount> result = new ArrayList<>();
         for(int id: resultList) {
             result.add(findSecurityAccount(id));
@@ -125,106 +132,170 @@ public class DatabaseManager {
     }
     public List<Loan> getLoans(Client client){
         em.getTransaction().begin();
-        List<Integer> resultList = (List<Integer>) em.createNativeQuery("SELECT id FROM loan WHERE client_id="+client.getId());
+        /*Query q = em.createNativeQuery("SELECT id FROM loan WHERE client_id= ?");
+        q.setParameter(1,client.getId());
+        List<Integer> resultList = q.getResultList();
         ArrayList<Loan> result = new ArrayList<>();
         for(int id: resultList) {
             result.add(findLoan(id));
-        }
+        }*/
+        Query q = em.createQuery("SELECT l FROM Loan l WHERE l.owner.id= :id");
+        q.setParameter("id",client.getId());
+        ArrayList<Loan> result = (ArrayList<Loan>) q.getResultList();
         em.getTransaction().commit();
         return result;
     }
-    public List<Loan> getTransactions(Account account){
+    public List<Transaction> getTransactions(Account account){
         em.getTransaction().begin();
-        List<Integer> resultList = (List<Integer>) em.createNativeQuery("SELECT id FROM transactions WHERE sender_account_id="+account.getId());
+        /*List<Integer> resultList = (List<Integer>) em.createNativeQuery("SELECT id FROM transactions WHERE sender_account_id="+account.getId());
         ArrayList<Loan> result = new ArrayList<>();
         for(int id: resultList) {
             result.add(findLoan(id));
-        }
+        }*/
+        Query q = em.createQuery("SELECT t FROM Transaction t WHERE t.senderAccount.id= :id");
+        q.setParameter("id",account.getId());
+        ArrayList<Transaction> result = (ArrayList<Transaction>) q.getResultList();
         em.getTransaction().commit();
         return result;
     }
-    public List<Loan> getPrivateShares(Account account){
+    public List<PrivateShares> getPrivateShares(Account account){
         em.getTransaction().begin();
-        List<Integer> resultList = (List<Integer>) em.createNativeQuery("SELECT id FROM privateshares WHERE security_account_id="+account.getId());
+        /*List<Integer> resultList = (List<Integer>) em.createNativeQuery("SELECT id FROM privateshares WHERE security_account_id="+account.getId());
         ArrayList<Loan> result = new ArrayList<>();
         for(int id: resultList) {
             result.add(findLoan(id));
-        }
+        }*/
+        Query q = em.createQuery("SELECT s FROM PrivateShares s WHERE s.securityAccount.id= :id");
+        q.setParameter("id",account.getId());
+        ArrayList<PrivateShares> result = (ArrayList<PrivateShares>) q.getResultList();
         em.getTransaction().commit();
         return result;
     }
 
     public List<SavingAccount> getAllSavingAccounts(){
         em.getTransaction().begin();
-        List<Integer> resultList = (List<Integer>) em.createNativeQuery("SELECT id FROM account WHERE account_type = saving");
+        /*List<Integer> resultList = (List<Integer>) em.createNativeQuery("SELECT id FROM account WHERE account_type = saving");
         ArrayList<SavingAccount> result = new ArrayList<>();
         for(int id: resultList) {
             result.add(findSavingAccount(id));
-        }
+        }*/
+        Query q = em.createQuery("SELECT s FROM SavingAccount s");
+        ArrayList<SavingAccount> result = (ArrayList<SavingAccount>) q.getResultList();
         em.getTransaction().commit();
         return result;
     }
     public List<CheckingAccount> getAllCheckingAccounts(){
         em.getTransaction().begin();
-        List<Integer> resultList = (List<Integer>) em.createNativeQuery("SELECT id FROM account WHERE account_type = checking");
+        /*List<Integer> resultList = (List<Integer>) em.createNativeQuery("SELECT id FROM account WHERE account_type = checking");
         ArrayList<CheckingAccount> result = new ArrayList<>();
         for(int id: resultList) {
             result.add(findCheckingAccount(id));
-        }
+        }*/
+        Query q = em.createQuery("SELECT s FROM CheckingAccount s");
+        ArrayList<CheckingAccount> result = (ArrayList<CheckingAccount>) q.getResultList();
         em.getTransaction().commit();
         return result;
     }
     public List<Loan> getAllLoans(){
         em.getTransaction().begin();
-        List<Integer> resultList = (List<Integer>) em.createNativeQuery("SELECT id FROM loan");
+        /*List<Integer> resultList = (List<Integer>) em.createNativeQuery("SELECT id FROM loan");
         ArrayList<Loan> result = new ArrayList<>();
         for(int id: resultList) {
             result.add(findLoan(id));
-        }
+        }*/
+        Query q = em.createQuery("SELECT s FROM Loan s");
+        ArrayList<Loan> result = (ArrayList<Loan>) q.getResultList();
         em.getTransaction().commit();
         return result;
     }
-    public List<Loan> getAllTransactions(){
+    public List<Transaction> getAllTransactions(){
         em.getTransaction().begin();
-        List<Integer> resultList = (List<Integer>) em.createNativeQuery("SELECT id FROM transactions");
+        /*List<Integer> resultList = (List<Integer>) em.createNativeQuery("SELECT id FROM transactions");
         ArrayList<Loan> result = new ArrayList<>();
         for(int id: resultList) {
             result.add(findLoan(id));
-        }
+        }*/
+        Query q = em.createQuery("SELECT s FROM Transaction s");
+        ArrayList<Transaction> result = (ArrayList<Transaction>) q.getResultList();
         em.getTransaction().commit();
         return result;
     }
 
     public List<Shares> getAllShares(){
         em.getTransaction().begin();
-        List<Integer> resultList = (List<Integer>) em.createNativeQuery("SELECT id FROM shares");
+        /*List<Integer> resultList = (List<Integer>) em.createNativeQuery("SELECT id FROM shares");
         ArrayList<Shares> result = new ArrayList<>();
         for(int id: resultList) {
             result.add(findShares(id));
-        }
+        }*/
+        Query q = em.createQuery("SELECT s FROM Shares s");
+        ArrayList<Shares> result = (ArrayList<Shares>) q.getResultList();
         em.getTransaction().commit();
         return result;
     }
     public List<PrivateShares> getAllPrivateShares(){
         em.getTransaction().begin();
-        List<Integer> resultList = (List<Integer>) em.createNativeQuery("SELECT id FROM privateshares");
+        /*List<Integer> resultList = (List<Integer>) em.createNativeQuery("SELECT id FROM privateshares");
         ArrayList<PrivateShares> result = new ArrayList<>();
         for(int id: resultList) {
             result.add(findPrivateShares(id));
-        }
+        }*/
+        Query q = em.createQuery("SELECT s FROM PrivateShares s");
+        ArrayList<PrivateShares> result = (ArrayList<PrivateShares>) q.getResultList();
         em.getTransaction().commit();
         return result;
     }
 
     public List<SecurityAccount> getAllSecurityAccount(){
         em.getTransaction().begin();
-        List<Integer> resultList = (List<Integer>) em.createNativeQuery("SELECT id FROM account WHERE account_type = security");
+        /*List<Integer> resultList = (List<Integer>) em.createNativeQuery("SELECT id FROM account WHERE account_type = security");
         ArrayList<SecurityAccount> result = new ArrayList<>();
         for(int id: resultList) {
             result.add(findSecurityAccount(id));
-        }
+        }*/
+        Query q = em.createQuery("SELECT s FROM SecurityAccount s");
+        ArrayList<SecurityAccount> result = (ArrayList<SecurityAccount>) q.getResultList();
         em.getTransaction().commit();
         return result;
+    }
+    public List<Client> getAllClient(){
+        em.getTransaction().begin();
+        Query q = em.createQuery("SELECT s FROM Client s");
+        List<Client> result = (List<Client>) q.getResultList();
+        em.getTransaction().commit();
+        return result;
+    }
+    public boolean isRegistered(String login, String password){
+        em.getTransaction().begin();
+        Query q = em.createQuery("SELECT s FROM Client s WHERE s.login = :login AND s.password = :password");
+        q.setParameter("login",login).setParameter("password",password);
+        Client result = (Client) q.getResultList();
+        em.getTransaction().commit();
+        if(result == null){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    public boolean loginCheck(String login){
+        em.getTransaction().begin();
+        Client result;
+        try {
+            Query q = em.createQuery("SELECT s FROM Client s WHERE s.login = :login");
+
+            q.setParameter("login",login);
+            result = (Client) q.getSingleResult();
+        }catch (Exception e){
+            result = null;
+        }
+
+        em.getTransaction().commit();
+        if(result == null){
+            return false;
+        }else{
+            return true;
+        }
     }
 
 

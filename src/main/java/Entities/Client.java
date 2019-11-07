@@ -28,8 +28,8 @@ public class Client extends BankUser{
     private double otherFee = 0;
 
     public Client(){}
-    public Client(String firstname, String surname, String login) {
-        super(firstname, surname,login);
+    public Client(String firstname, String surname, String login, String password) {
+        super(firstname, surname,login,password);
         this.checkingAccounts = new ArrayList<CheckingAccount>();
         this.savingAccounts = new ArrayList<SavingAccount>();
         this.loans = new ArrayList<Loan>();

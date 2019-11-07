@@ -149,7 +149,7 @@ public class ChangePricePage extends JFrame {
 
     public static void main(String[] args) {
         ChangePricePage changePricePage = new ChangePricePage(new Bank(
-                new Manager("", "", ""), new ArrayList<Client>()));
+                new Manager("", "", "",""), new ArrayList<Client>()));
     }
 
 }

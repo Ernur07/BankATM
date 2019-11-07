@@ -1,3 +1,4 @@
+import DatabaseConnection.DatabaseManager;
 import Entities.Bank;
 import Entities.Client;
 
@@ -9,10 +10,11 @@ import java.awt.*;
  */
 public class ClientLoginPage extends JFrame {
     private Bank bank;
+    private DatabaseManager db = new DatabaseManager();
     public ClientLoginPage(Bank bank) {
         this.bank=bank;
         setTitle("Client login page");
-        setLayout(new GridLayout(5,2));
+        setLayout(new GridLayout(6,2));
         JLabel label = new JLabel("Please enter your name and surname");
         add(label);
         add(new JPanel());
@@ -31,16 +33,23 @@ public class ClientLoginPage extends JFrame {
         add(new JLabel("Your Login"));
         add(new JPanel());
 
+        JTextField password = new JTextField();
+        add(password);
+        add(new JLabel("Your Password"));
+        add(new JPanel());
+
         JButton submit=new JButton("Submit");
         submit.addActionListener(e -> {
-            Client client = new Client(clientName.getText(),clientSurname.getText(),login.getText());
+            Client client = new Client(clientName.getText(),clientSurname.getText(),login.getText(),password.getText());
             if(clientName.getText().equals("")||clientSurname.getText().equals("")){
                 JOptionPane.showMessageDialog(new Frame(),"Wrong input");
-            }else if(this.bank.getClients().contains(client)){
+            }else if(db.loginCheck(client.getLogin())){
                 JOptionPane.showMessageDialog(new Frame(),"Client with this login is already existed");
             }else{
                 this.bank.getClients().add(client);
-                ClientPersonalPage clientPersonalPage = new ClientPersonalPage(bank,client);
+                db.add(client);
+                Client dataClient = db.findClient(client.getId());
+                ClientPersonalPage clientPersonalPage = new ClientPersonalPage(bank,dataClient);
             }
         });
         add(submit);
