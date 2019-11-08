@@ -1,3 +1,4 @@
+import DatabaseConnection.DatabaseManager;
 import Entities.*;
 import Enums.Currencies;
 
@@ -11,10 +12,11 @@ import java.util.ArrayList;
 public class AccountManagementPage extends JFrame {
     private Client client;
     private String accountRadioChoice="";
+    private DatabaseManager db = new DatabaseManager();
 
     public AccountManagementPage(Client client) throws HeadlessException {
 
-        this.client=client;
+        this.client=db.findClient(client.getId());
         setLayout(new GridLayout(3,2));
         JLabel nameLabel = new JLabel("Welcome "+client.getFirstname()+" "+client.getSurname());
         add(nameLabel);
@@ -50,10 +52,14 @@ public class AccountManagementPage extends JFrame {
         deleteButton.addActionListener(e -> {
             if(accountsComboBox.getSelectedItem() instanceof CheckingAccount){
                 this.client.getCheckingAccounts().remove(accountsComboBox.getSelectedItem());
+                CheckingAccount checkingAccount= (CheckingAccount) accountsComboBox.getSelectedItem();
+                db.remove(checkingAccount);
                 this.client.setOtherFee(this.client.getOtherFee()+Account.getAccountClosingFee());
                 JOptionPane.showMessageDialog(new Frame(),"Account successfully deleted");
             }else if(accountsComboBox.getSelectedItem() instanceof SavingAccount){
                 this.client.getSavingAccounts().remove(accountsComboBox.getSelectedItem());
+                SavingAccount savingAccount= (SavingAccount) accountsComboBox.getSelectedItem();
+                db.remove(savingAccount);
                 this.client.setOtherFee(this.client.getOtherFee()+Account.getAccountClosingFee());
                 JOptionPane.showMessageDialog(new Frame(),"Account successfully deleted");
             }else{
@@ -105,6 +111,7 @@ public class AccountManagementPage extends JFrame {
                         JOptionPane.showMessageDialog(new Frame(),"Account with given name is already exited");
                     }else{
                         this.client.getCheckingAccounts().add(checkingAccount1);
+                        db.add(checkingAccount1);
                         JOptionPane.showMessageDialog(new Frame(),"Account successfully created");
                     }
                 }else if(this.accountRadioChoice.equals("Saving Account")){
@@ -114,10 +121,12 @@ public class AccountManagementPage extends JFrame {
                         JOptionPane.showMessageDialog(new Frame(),"Account with given name is already exited");
                     }else{
                         this.client.getSavingAccounts().add(savingAccount1);
+                        db.add(savingAccount1);
                         JOptionPane.showMessageDialog(new Frame(),"Account successfully created");
                     }
                 }
                 this.client.setOtherFee(this.client.getOtherFee()+Account.getAccountOpeningFee());
+                db.update(this.client);
             }
         });
         add(addAccountButton);

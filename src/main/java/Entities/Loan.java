@@ -25,19 +25,21 @@ public class Loan {
 
     public Loan(){}
     public Loan(double annualInterestRate, int numberOfYears,
-                double loanAmount) {
+                double loanAmount, Client owner) {
         this.annualInterestRate = annualInterestRate;
         this.numberOfYears = numberOfYears;
         this.loanAmount = loanAmount;
         loanDate = new Date();
         this.totalPayment = this.getTotalPayment();
+        this.owner=owner;
     }
     public Loan(int numberOfYears,
-                double loanAmount) {
+                double loanAmount, Client owner) {
         this.numberOfYears = numberOfYears;
         this.loanAmount = loanAmount;
         loanDate = new Date();
         this.totalPayment = this.getTotalPayment();
+        this.owner=owner;
     }
 
     public double getAnnualInterestRate() {
@@ -84,5 +86,21 @@ public class Loan {
 
     public void setTotalPayment(double totalPayment) {
         this.totalPayment = totalPayment;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Client getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Client owner) {
+        this.owner = owner;
     }
 }

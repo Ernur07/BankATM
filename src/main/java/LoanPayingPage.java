@@ -1,3 +1,4 @@
+import DatabaseConnection.DatabaseManager;
 import Entities.Account;
 import Entities.Client;
 import Entities.Loan;
@@ -12,10 +13,11 @@ import java.util.ArrayList;
 public class LoanPayingPage extends JFrame {
     private Client client;
     private Loan loan;
+    private DatabaseManager db= new DatabaseManager();
 
     public LoanPayingPage(Client client, Loan loan){
-        this.client = client;
-        this.loan=loan;
+        this.client = db.findClient(client.getId());
+        this.loan=db.findLoan(loan.getId());
         setLayout(new GridLayout(2,2));
         add(new JPanel());
         JButton back = new JButton("Back");
@@ -55,9 +57,12 @@ public class LoanPayingPage extends JFrame {
                     JOptionPane.showMessageDialog(new Frame(),"Not sufficient amount of money in the account");
                 }else {
                     temp.setBalance(temp.getBalance()-this.loan.getMonthlyPayment());
+                    db.update(temp);
                     this.loan.setTotalPayment(this.loan.getTotalPayment()-this.loan.getMonthlyPayment());
+                    db.update(this.loan);
                     if(this.loan.getTotalPayment()<0){
                         this.client.getLoans().remove(loan);
+                        db.remove(loan);
                     }
                     JOptionPane.showMessageDialog(new Frame(),"Successful operation ");
                 }

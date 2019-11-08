@@ -14,10 +14,8 @@ public class ClientLoginPage extends JFrame {
     public ClientLoginPage(Bank bank) {
         this.bank=bank;
         setTitle("Client login page");
-        setLayout(new GridLayout(6,2));
-        JLabel label = new JLabel("Please enter your name and surname");
-        add(label);
-        add(new JPanel());
+        setLayout(new GridLayout(5,2));
+
 
         JTextField clientName = new JTextField();
         add(clientName);
@@ -31,21 +29,21 @@ public class ClientLoginPage extends JFrame {
         JTextField login = new JTextField();
         add(login);
         add(new JLabel("Your Login"));
-        add(new JPanel());
+
 
         JTextField password = new JTextField();
         add(password);
         add(new JLabel("Your Password"));
-        add(new JPanel());
 
         JButton submit=new JButton("Submit");
         submit.addActionListener(e -> {
-            Client client = new Client(clientName.getText(),clientSurname.getText(),login.getText(),password.getText());
-            if(clientName.getText().equals("")||clientSurname.getText().equals("")){
+            //Client client = new Client(clientName.getText(),clientSurname.getText(),login.getText(),password.getText());
+            if(clientName.getText().equals("")||clientSurname.getText().equals("")||login.getText().equals("")||password.getText().equals("")){
                 JOptionPane.showMessageDialog(new Frame(),"Wrong input");
-            }else if(db.loginCheck(client.getLogin())){
+            }else if(db.loginCheck(login.getText())){
                 JOptionPane.showMessageDialog(new Frame(),"Client with this login is already existed");
             }else{
+                Client client = new Client(clientName.getText(),clientSurname.getText(),login.getText(),password.getText());
                 this.bank.getClients().add(client);
                 db.add(client);
                 Client dataClient = db.findClient(client.getId());

@@ -1,9 +1,12 @@
+import DatabaseConnection.DatabaseManager;
+import Entities.Account;
 import Entities.Bank;
 import Entities.Client;
 import Entities.Loan;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * This page shows all possible actions of ATM to client
@@ -11,10 +14,11 @@ import java.awt.*;
 public class ClientPersonalPage extends JFrame {
     private Bank bank;
     private Client client;
+    private DatabaseManager db = new DatabaseManager();
 
     public ClientPersonalPage(Bank bank, Client client ) throws HeadlessException {
         this.bank=bank;
-        this.client=client;
+        this.client=db.findClient(client.getId());
         setLayout(new GridLayout(5,2));
 
         JLabel nameLabel = new JLabel("Welcome "+client.getFirstname()+" "+client.getSurname());

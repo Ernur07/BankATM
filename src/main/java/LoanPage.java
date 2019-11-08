@@ -1,3 +1,4 @@
+import DatabaseConnection.DatabaseManager;
 import Entities.*;
 
 import javax.swing.*;
@@ -9,9 +10,10 @@ import java.util.ArrayList;
  */
 public class LoanPage extends JFrame {
     private Client client;
+    private DatabaseManager db = new DatabaseManager();
 
     public LoanPage(Client client){
-        this.client=client;
+        this.client=db.findClient(client.getId());
 
         setLayout(new GridLayout(3,2));
         add(new JPanel());
@@ -50,8 +52,9 @@ public class LoanPage extends JFrame {
             try{
                 Double loanAmount=Double.parseDouble(newLoanTextField.getText());
                 Integer year = (Integer) yearsBox.getSelectedItem();
-                Loan loan = new Loan(0.6,year,loanAmount);
+                Loan loan = new Loan(0.6,year,loanAmount,this.client);
                 this.client.getLoans().add(loan);
+                db.add(loan);
                 JOptionPane.showMessageDialog(new Frame(),"New Loan created");
             }catch (Exception ex){
                 JOptionPane.showMessageDialog(new Frame(),"Wrong input. " + ex);
@@ -63,7 +66,7 @@ public class LoanPage extends JFrame {
          * Table of all client's loans
          */
         loanListPanel.setLayout(new BoxLayout(loanListPanel,BoxLayout.Y_AXIS));
-        LoanTableModel tm = new LoanTableModel((ArrayList<Loan>) client.getLoans());
+        LoanTableModel tm = new LoanTableModel((ArrayList<Loan>) db.getLoans(client));
         JTable loanTable = new JTable(tm);
         add(loanTable);
         loanTable.setAutoCreateRowSorter(true);

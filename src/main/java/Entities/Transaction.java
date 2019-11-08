@@ -23,8 +23,9 @@ public class Transaction {
     private Date date;
 
     public Transaction(){}
-    public Transaction(Client receiver, Account receiverAccount, double amount) {
+    public Transaction(Account receiverAccount,Account senderAccount, double amount) {
         this.receiverAccount = receiverAccount;
+        this.senderAccount = senderAccount;
         this.amount = amount;
         date = new Date();
     }

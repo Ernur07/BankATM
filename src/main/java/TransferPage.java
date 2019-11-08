@@ -1,3 +1,4 @@
+import DatabaseConnection.DatabaseManager;
 import Entities.Account;
 import Entities.Bank;
 import Entities.Client;
@@ -16,10 +17,11 @@ public class TransferPage extends JFrame {
     private Bank bank;
     private Client client;
     private Client receiverClient;
+    private DatabaseManager db = new DatabaseManager();
 
     public TransferPage(Bank bank, Client client){
         this.bank = bank;
-        this.client=client;
+        this.client= db.findClient(client.getId());
 
         setLayout(new GridLayout(3,2));
         add(new JPanel());
@@ -44,7 +46,6 @@ public class TransferPage extends JFrame {
         }
         accountsComboBox.addActionListener(e->{
             Account temp = (Account) accountsComboBox.getSelectedItem();
-            System.out.println(temp.getBalance());
             accountBalance.setText("Balance: "+temp.getBalance());
             accountBalance.repaint();
         });
@@ -65,15 +66,15 @@ public class TransferPage extends JFrame {
 
         JComboBox clientsComboBox;
         JComboBox receiverAccountsComboBox = new JComboBox();
-        if(this.bank.getClients().isEmpty()){
+        if(db.getAllClient().isEmpty()){
             clientsComboBox = new JComboBox();
         }else{
-            ArrayList<Client> clients=this.bank.getClients();
+            ArrayList<Client> clients= new ArrayList<>(db.getAllClient()) ;
             clientsComboBox = new JComboBox(clients.toArray());
         }
         clientsComboBox.addActionListener(e -> {
             Client receiver = (Client) clientsComboBox.getSelectedItem();
-            this.receiverClient = receiver;
+            this.receiverClient = db.findClient(receiver.getId());
             ArrayList<Account> receiverAccounts = receiver.getAllAccounts();
             receiverAccountsComboBox.removeAllItems();
             for(Account account:receiverAccounts){
@@ -95,17 +96,22 @@ public class TransferPage extends JFrame {
                     JOptionPane.showMessageDialog(new Frame(),"Wrong input. ");
                 }else {
                     Double amount = Double.parseDouble(transferTextField.getText());
-                    Transaction transaction = new Transaction(this.receiverClient,receiverAccount,amount);
+                    Transaction transaction = new Transaction(receiverAccount,temp,amount);
                     temp.getTransactions().add(transaction);
+                    db.add(transaction);
                     if(temp.getCurrency().equals(receiverAccount.getCurrency())){
                         temp.setBalance(temp.getBalance() - ((1+temp.getTransactionFee())*amount));
                         receiverAccount.setBalance(receiverAccount.getBalance()+amount);
+                        db.update(temp);
+                        db.update(receiverAccount);
                         JOptionPane.showMessageDialog(new Frame(),"Successful operation ");
                     }else{
                         for(CurrencyExchangeRate exchangeRate:CurrencyExchangeRate.values()){
                             if(exchangeRate.getName().equals(temp.getCurrency()+"2"+receiverAccount.getCurrency())){
                                 temp.setBalance(temp.getBalance() - ((1+temp.getTransactionFee())*amount));
+                                db.update(temp);
                                 receiverAccount.setBalance(receiverAccount.getBalance()+ exchangeRate.getRate()*amount);
+                                db.update(receiverAccount);
                                 break;
                             }
                         }

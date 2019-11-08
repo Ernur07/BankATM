@@ -28,9 +28,9 @@ public class DatabaseManager {
 
     public <E> void remove(E entity){
         em.getTransaction().begin();
-        em.merge(entity);
+        E temp = em.merge(entity);
         em.flush();
-        em.remove(entity);
+        em.remove(temp);
         em.flush();
         em.getTransaction().commit();
     }
@@ -139,9 +139,12 @@ public class DatabaseManager {
         for(int id: resultList) {
             result.add(findLoan(id));
         }*/
-        Query q = em.createQuery("SELECT l FROM Loan l WHERE l.owner.id= :id");
-        q.setParameter("id",client.getId());
-        ArrayList<Loan> result = (ArrayList<Loan>) q.getResultList();
+        Query q = em.createQuery("SELECT l FROM Loan l WHERE l.owner= :id");
+        q.setParameter("id",client);
+        ArrayList<Loan> result = new ArrayList<Loan> (q.getResultList());
+        for (Loan l:result) {
+            System.out.println(l.getTotalPayment());
+        }
         em.getTransaction().commit();
         return result;
     }
@@ -263,39 +266,52 @@ public class DatabaseManager {
         Query q = em.createQuery("SELECT s FROM Client s");
         List<Client> result = (List<Client>) q.getResultList();
         em.getTransaction().commit();
+        System.out.println(result);
         return result;
     }
     public boolean isRegistered(String login, String password){
         em.getTransaction().begin();
-        Query q = em.createQuery("SELECT s FROM Client s WHERE s.login = :login AND s.password = :password");
-        q.setParameter("login",login).setParameter("password",password);
-        Client result = (Client) q.getResultList();
+        Client result= null;
+        try{
+            Query q = em.createQuery("SELECT s FROM Client s WHERE s.login = :login AND s.password = :password");
+            q.setParameter("login",login).setParameter("password",password);
+            result = (Client) q.getSingleResult();
+            System.out.println(result);
+
+        }catch(Exception e){
+        }
+
         em.getTransaction().commit();
         if(result == null){
-            return false;
-        }else{
             return true;
+        }else{
+            return false;
         }
     }
 
     public boolean loginCheck(String login){
         em.getTransaction().begin();
-        Client result;
+        Client result = null;
         try {
             Query q = em.createQuery("SELECT s FROM Client s WHERE s.login = :login");
-
             q.setParameter("login",login);
             result = (Client) q.getSingleResult();
-        }catch (Exception e){
-            result = null;
-        }
-
+            System.out.println(result);
+        }catch (Exception e){}
         em.getTransaction().commit();
         if(result == null){
             return false;
         }else{
             return true;
         }
+    }
+    public Client findClientByLogin(String login){
+        em.getTransaction().begin();
+        Query q = em.createQuery("SELECT s FROM Client s WHERE s.login = :login");
+        q.setParameter("login",login);
+        Client result = (Client) q.getSingleResult();
+        em.getTransaction().commit();
+        return result;
     }
 
 

@@ -1,7 +1,9 @@
+import DatabaseConnection.DatabaseManager;
 import Entities.Account;
 import Entities.Client;
 
 import javax.swing.*;
+import javax.xml.crypto.Data;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -11,9 +13,10 @@ import java.util.ArrayList;
  */
 public class DepositPage extends JFrame {
     private Client client;
+    private DatabaseManager db = new DatabaseManager();
 
     public DepositPage(Client client) throws HeadlessException {
-        this.client=client;
+        this.client=db.findClient(client.getId());
 
         setLayout(new GridLayout(2,2));
         add(new JPanel());
@@ -59,6 +62,7 @@ public class DepositPage extends JFrame {
                     JOptionPane.showMessageDialog(new Frame(),"Wrong input. ");
                 }else {
                     temp.setBalance(temp.getBalance() + Double.parseDouble(depositTextField.getText()));
+                    db.update(temp);
                     JOptionPane.showMessageDialog(new Frame(),"Successful operation ");
                 }
             }catch (Exception ex){

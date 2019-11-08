@@ -30,7 +30,7 @@ public class AccountListPage extends JFrame {
          */
         JPanel savingAccountPanel = new JPanel();
         savingAccountPanel.setLayout(new BoxLayout(savingAccountPanel,BoxLayout.Y_AXIS));
-        SavingAccountTableModel tm = new SavingAccountTableModel((ArrayList<SavingAccount>) client.getSavingAccounts());
+        SavingAccountTableModel tm = new SavingAccountTableModel(new ArrayList<SavingAccount>(client.getSavingAccounts()));
         JTable savingTable = new JTable(tm);
         add(savingTable);
         savingTable.setAutoCreateRowSorter(true);
@@ -45,7 +45,7 @@ public class AccountListPage extends JFrame {
          */
         JPanel checkingAccountPanel = new JPanel();
         checkingAccountPanel.setLayout(new BoxLayout(checkingAccountPanel,BoxLayout.Y_AXIS));
-        CheckingAccountTableModel tm2 = new CheckingAccountTableModel((ArrayList<CheckingAccount>) client.getCheckingAccounts());
+        CheckingAccountTableModel tm2 = new CheckingAccountTableModel(new ArrayList<CheckingAccount> (client.getCheckingAccounts()));
         JTable checkingTable = new JTable(tm2);
         add(checkingTable);
         checkingTable.setAutoCreateRowSorter(true);

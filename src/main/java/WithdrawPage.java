@@ -1,3 +1,4 @@
+import DatabaseConnection.DatabaseManager;
 import Entities.Account;
 import Entities.Bank;
 import Entities.Client;
@@ -13,6 +14,7 @@ import java.util.InputMismatchException;
  */
 public class WithdrawPage extends JFrame {
     private Client client;
+    private DatabaseManager db=new DatabaseManager();
 
     public WithdrawPage(Client client) throws HeadlessException {
         this.client=client;
@@ -41,7 +43,6 @@ public class WithdrawPage extends JFrame {
         }
         accountsComboBox.addActionListener(e->{
             Account temp = (Account) accountsComboBox.getSelectedItem();
-            System.out.println(temp.getBalance());
             accountBalance.setText("Balance: "+temp.getBalance());
             accountBalance.repaint();
         });
@@ -61,6 +62,7 @@ public class WithdrawPage extends JFrame {
                     JOptionPane.showMessageDialog(new Frame(),"Wrong input. ");
                 }else {
                     temp.setBalance(temp.getBalance() - Double.parseDouble(withdrawTextField.getText()));
+                    db.update(temp);
                     JOptionPane.showMessageDialog(new Frame(),"Successful operation ");
                 }
             }catch (Exception ex){

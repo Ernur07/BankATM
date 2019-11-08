@@ -10,9 +10,10 @@ public class Test {
 
     public static void main(String[] args) {
         DatabaseManager db = new DatabaseManager();
-        Client c=new Client("Yernur","Yernur","Yernur","Yernur");
-        db.add(c);
+        /*Client c=db.findClient(1);
+        SavingAccount sa= new SavingAccount("name",0,0.5,"usd",c);*/
         System.out.println(db.getAllClient());
+
     }
 }
 
