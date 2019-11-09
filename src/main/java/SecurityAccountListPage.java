@@ -2,18 +2,48 @@ import Entities.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-
+import java.util.*;
+import java.util.List;
 
 
 public class SecurityAccountListPage extends JFrame{
     private Client client;
 
-    public SecurityAccountListPage(){//Client client){
-        this.client = new Client("a","b","c","c");
-
+    public SecurityAccountListPage(Bank bank, Client c){
+        //this.client = new Client("a","b","c","c");
+        this.client = c;
 
         setLayout(new GridLayout(3,1));
+
+        /**
+         * Security accounts list
+         */
+        JPanel securityAccountPanel = new JPanel();
+        securityAccountPanel.setLayout(new BoxLayout(securityAccountPanel,BoxLayout.Y_AXIS));
+        SecurityAccountTableModel tm = new SecurityAccountTableModel((ArrayList<SecurityAccount>) client.getSecurityAccounts());
+        JTable savingTable = new JTable(tm);
+        add(savingTable);
+        savingTable.setAutoCreateRowSorter(true);
+        JScrollPane scrollPane = new JScrollPane(savingTable);
+        scrollPane.setPreferredSize(new Dimension(380,280));
+        securityAccountPanel.add(new JLabel(this.client.getLogin()+"'s Security Accounts"));
+        securityAccountPanel.add(scrollPane);
+        add(securityAccountPanel);
+
+        /**
+         * Manage button
+         **/
+        JButton manage = new JButton("Manage");
+        manage.addActionListener(e ->{
+
+            //TODO
+            //pick the account
+            SecurityAccount account = client.getSecurityAccounts().get(0);
+            new SecurityAccountPage(bank, account, client);
+        });
+        manage.setSize(1,1);
+        add(manage);
+
         /**
          * Go back button
          */
@@ -21,23 +51,9 @@ public class SecurityAccountListPage extends JFrame{
         back.addActionListener(e -> {
             this.dispose();
         });
-        back.setSize(2,2);
+        back.setSize(1,1);
         add(back);
 
-        /**
-         * Security accounts list
-         */
-        JPanel securityAccountPanel = new JPanel();
-        securityAccountPanel.setLayout(new BoxLayout(securityAccountPanel,BoxLayout.Y_AXIS));
-        SavingAccountTableModel tm = new SavingAccountTableModel((ArrayList<SavingAccount>) client.getSavingAccounts());
-        JTable savingTable = new JTable(tm);
-        add(savingTable);
-        savingTable.setAutoCreateRowSorter(true);
-        JScrollPane scrollPane = new JScrollPane(savingTable);
-        scrollPane.setPreferredSize(new Dimension(380,280));
-        securityAccountPanel.add(new JLabel(this.client.getLogin()+"'s Saving Accounts"));
-        securityAccountPanel.add(scrollPane);
-        add(securityAccountPanel);
 
 
 
@@ -50,6 +66,12 @@ public class SecurityAccountListPage extends JFrame{
     }
 
     public static void main(String[] args) {
-        SecurityAccountListPage page = new SecurityAccountListPage();
+        Client client = new Client();
+        SecurityAccount account = new SecurityAccount("sec", 0, "c", client);
+        List<SecurityAccount> list = new ArrayList<>();
+        list.add(account);
+        client.setSecurityAccounts(list);
+        Bank bank = new Bank(null, null);
+        SecurityAccountListPage page = new SecurityAccountListPage(bank, client);
     }
 }

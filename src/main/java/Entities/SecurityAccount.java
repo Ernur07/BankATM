@@ -28,4 +28,8 @@ public class SecurityAccount extends Account {
     public void setShares(List<PrivateShares> shares) {
         this.shares = shares;
     }
+
+    public void addShare(PrivateShares share) {
+        this.shares.add(share);
+    }
 }

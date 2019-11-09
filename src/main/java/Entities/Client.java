@@ -90,4 +90,12 @@ public class Client extends BankUser{
         Client client = (Client) obj;
         return this.getLogin().equals(client.getLogin());
     }
+
+    public List<SecurityAccount> getSecurityAccounts() {
+        return securityAccounts;
+    }
+
+    public void setSecurityAccounts(List<SecurityAccount> securityAccounts) {
+        this.securityAccounts = securityAccounts;
+    }
 }
