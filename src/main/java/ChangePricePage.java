@@ -1,9 +1,11 @@
+import DatabaseConnection.DatabaseManager;
 import Entities.*;
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -11,6 +13,8 @@ import java.util.ArrayList;
  */
 public class ChangePricePage extends JFrame {
     private Bank bank;
+    private ArrayList<Shares> shares;
+    private DatabaseManager db;
     private JLabel titleLabel;
     private JLabel priceLabel;
     private JTextField priceText;
@@ -21,8 +25,8 @@ public class ChangePricePage extends JFrame {
 
     public ChangePricePage(Bank bank) {
         this.bank = bank;
+        db = new DatabaseManager();
 
-        //setLayout(new GridLayout(2,2));
 
         titleLabel = new JLabel("Select one to change price: ");
         Font labelFont = new Font(Font.DIALOG,  Font.BOLD, 20);
@@ -34,9 +38,19 @@ public class ChangePricePage extends JFrame {
         submit = new JButton("Submit");
         back = new JButton("Back");
 
-        StockTableModel stockTableModel = new StockTableModel();
+        // get all shares from database
+        shares = (ArrayList<Shares>) db.getAllShares();
 
-        stockTable = new JTable(stockTableModel);
+//        shares = new ArrayList<>();
+//        shares.add(new Shares("Apple", "AAPL", 255.82, 100));
+//        shares.add(new Shares("Tencent", "TCEHY", 41.09, 300));
+//        shares.add(new Shares("Alibaba", "BABA", 176.46, 200));
+//        shares.add(new Shares("Google", "GOOGL", 1272.50, 1100));
+//        shares.add(new Shares("Uber", "UBER", 31.37, 1500));
+//        shares.add(new Shares("Microsoft", "MSFT", 143.72, 600));
+        StockMarketTableModel stockMarketTableModel = new StockMarketTableModel(shares);
+
+        stockTable = new JTable(stockMarketTableModel);
         stockTable.setAutoCreateRowSorter(true);
         sp = new JScrollPane(stockTable);
 
@@ -89,12 +103,23 @@ public class ChangePricePage extends JFrame {
                             "Error", JOptionPane.ERROR_MESSAGE);
                 } else {
                     double doubleValue = Double.valueOf(value);
-                    value = Double.toString(doubleValue);
-                    stockTable.getModel().setValueAt(value, stockTable.getSelectedRow(), 2);
-                    //refresh the JTable
-                    stockTable.repaint();
-                    JOptionPane.showMessageDialog(null, "Success! " +
-                            "Change the price to " + value);
+                    if (doubleValue < 0) {
+                        JOptionPane.showMessageDialog(null,
+                                "Input should not less than 0!",
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        stockTable.getModel().setValueAt(doubleValue, stockTable.getSelectedRow(), 3);
+                        //refresh the JTable
+                        stockTable.repaint();
+                        JOptionPane.showMessageDialog(null, "Success! " +
+                                "Change the price to " + doubleValue);
+
+                        // update the price in database
+                        Integer id = (Integer) stockTable.getValueAt(stockTable.getSelectedRow(), 0);
+                        Shares share = db.findShares(id);
+                        share.setSharePrice(doubleValue);
+                        db.update(share);
+                    }
                 }
             }
         });
@@ -108,43 +133,6 @@ public class ChangePricePage extends JFrame {
             return false;
         }
         return true;
-    }
-
-    public class StockTableModel extends AbstractTableModel {
-        private String[] columnNames = { "Company", "Code", "Price" };
-        private String[][] data = {
-                { "Apple", "AAPL", "255.82" },
-                { "Tencent", "TCEHY", "41.09" },
-                { "Alibaba", "BABA", "176.46" },
-                { "Google", "GOOGL", "1272.50" },
-                { "Uber", "UBER", "31.37" },
-                { "Microsoft", "MSFT", "143.72" },
-        };
-
-
-        @Override
-        public int getRowCount() {
-            return this.data.length;
-        }
-
-        @Override
-        public int getColumnCount() {
-            return columnNames.length;
-        }
-
-        @Override
-        public Object getValueAt(int rowIndex, int columnIndex) {
-            return data[rowIndex][columnIndex];
-        }
-
-        @Override
-        public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-            data[rowIndex][columnIndex] = (String) aValue;
-        }
-
-        public String getColumnName(int col){
-            return this.columnNames[col];
-        }
     }
 
     public static void main(String[] args) {
