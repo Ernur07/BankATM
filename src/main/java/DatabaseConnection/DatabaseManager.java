@@ -232,7 +232,7 @@ public class DatabaseManager {
             result.add(findShares(id));
         }*/
         Query q = em.createQuery("SELECT s FROM Shares s");
-        ArrayList<Shares> result = (ArrayList<Shares>) q.getResultList();
+        ArrayList<Shares> result = new ArrayList<Shares>(q.getResultList());
         em.getTransaction().commit();
         return result;
     }
