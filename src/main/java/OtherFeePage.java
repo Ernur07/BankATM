@@ -1,7 +1,9 @@
+import DatabaseConnection.DatabaseManager;
 import Entities.Account;
 import Entities.Client;
 
 import javax.swing.*;
+import javax.xml.crypto.Data;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -10,9 +12,10 @@ import java.util.ArrayList;
  */
 public class OtherFeePage extends JFrame {
     private Client client;
+    private DatabaseManager db= new DatabaseManager();
 
     public OtherFeePage(Client client){
-        this.client=client;
+        this.client=db.findClient(client.getId());
 
         setLayout(new GridLayout(2,2));
         JLabel otherFee = new JLabel("Other fee: "+this.client.getOtherFee());
@@ -39,7 +42,6 @@ public class OtherFeePage extends JFrame {
         }
         accountsComboBox.addActionListener(e->{
             Account temp = (Account) accountsComboBox.getSelectedItem();
-            System.out.println(temp.getBalance());
             accountBalance.setText("Balance: "+temp.getBalance());
             accountBalance.repaint();
         });
@@ -60,6 +62,8 @@ public class OtherFeePage extends JFrame {
                 }else {
                     this.client.setOtherFee(this.client.getOtherFee()-Double.parseDouble(otherFeeTextField.getText()));
                     temp.setBalance(temp.getBalance() - Double.parseDouble(otherFeeTextField.getText()));
+                    db.update(this.client);
+                    db.update(temp);
                     otherFee.setText("Other fee: "+this.client.getOtherFee());
                     otherFee.repaint();
 

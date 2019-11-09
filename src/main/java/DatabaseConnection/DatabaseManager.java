@@ -264,7 +264,7 @@ public class DatabaseManager {
     public List<Client> getAllClient(){
         em.getTransaction().begin();
         Query q = em.createQuery("SELECT s FROM Client s");
-        List<Client> result = (List<Client>) q.getResultList();
+        ArrayList<Client> result = new ArrayList<Client>(q.getResultList());
         em.getTransaction().commit();
         System.out.println(result);
         return result;

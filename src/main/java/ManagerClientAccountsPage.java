@@ -1,3 +1,4 @@
+import DatabaseConnection.DatabaseManager;
 import Entities.*;
 
 import javax.swing.*;
@@ -9,9 +10,10 @@ import java.util.ArrayList;
  */
 public class ManagerClientAccountsPage extends JFrame {
     private Client client;
+    private DatabaseManager db= new DatabaseManager();
 
     public ManagerClientAccountsPage(Client client){
-        this.client=client;
+        this.client=db.findClient(client.getId());
 
         setLayout(new GridLayout(3,2));
         add(new JLabel(client.getLogin()+"'s accounts"));
@@ -27,7 +29,7 @@ public class ManagerClientAccountsPage extends JFrame {
          */
         JPanel savingAccountPanel = new JPanel();
         savingAccountPanel.setLayout(new BoxLayout(savingAccountPanel,BoxLayout.Y_AXIS));
-        SavingAccountTableModel tm = new SavingAccountTableModel((ArrayList<SavingAccount>) client.getSavingAccounts());
+        SavingAccountTableModel tm = new SavingAccountTableModel(new ArrayList<>(client.getSavingAccounts()));
         JTable savingTable = new JTable(tm);
         add(savingTable);
         savingTable.setAutoCreateRowSorter(true);
@@ -43,11 +45,13 @@ public class ManagerClientAccountsPage extends JFrame {
         JButton payInterestRate = new JButton("Pay Interest Rate");
         payInterestRate.addActionListener(e -> {
             int savingId=savingTable.getSelectedRow();
-            SavingAccount selectedAccount =  client.getSavingAccounts().get(savingId);
+
             if(savingId==-1){
                 JOptionPane.showMessageDialog(new Frame(),"Select saving account from the list");
             }else{
+                SavingAccount selectedAccount =  client.getSavingAccounts().get(savingId);
                 selectedAccount.setBalance((1+selectedAccount.getInterestRate())*selectedAccount.getBalance());
+                db.update(selectedAccount);
                 JOptionPane.showMessageDialog(new Frame(),"Interest rate payment is applied to given account");
             }
         });
@@ -58,7 +62,7 @@ public class ManagerClientAccountsPage extends JFrame {
          */
         JPanel checkingAccountPanel = new JPanel();
         checkingAccountPanel.setLayout(new BoxLayout(checkingAccountPanel,BoxLayout.Y_AXIS));
-        CheckingAccountTableModel tm2 = new CheckingAccountTableModel((ArrayList<CheckingAccount>) client.getCheckingAccounts());
+        CheckingAccountTableModel tm2 = new CheckingAccountTableModel(new ArrayList<>(client.getCheckingAccounts()));
         JTable checkingTable = new JTable(tm2);
         add(checkingTable);
         checkingTable.setAutoCreateRowSorter(true);

@@ -23,7 +23,7 @@ public class ManagerClientLoanPage extends JFrame {
         add(back);
         JPanel loanListPanel = new JPanel();
         loanListPanel.setLayout(new BoxLayout(loanListPanel,BoxLayout.Y_AXIS));
-        LoanTableModel tm = new LoanTableModel((ArrayList<Loan>) client.getLoans());
+        LoanTableModel tm = new LoanTableModel(new ArrayList<Loan>(client.getLoans()));
         JTable loanTable = new JTable(tm);
         add(loanTable);
         loanTable.setAutoCreateRowSorter(true);

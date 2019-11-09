@@ -1,10 +1,9 @@
-import Entities.Bank;
-import Entities.ClientTableModel;
-import Entities.Manager;
-import Entities.SavingAccountTableModel;
+import DatabaseConnection.DatabaseManager;
+import Entities.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 
 /**
@@ -12,6 +11,7 @@ import java.awt.*;
  */
 public class ManagerMenu extends JFrame {
     private Bank bank;
+    private DatabaseManager db = new DatabaseManager();
     public ManagerMenu(Bank bank) {
         this.bank = bank;
 
@@ -32,7 +32,7 @@ public class ManagerMenu extends JFrame {
         JLabel clientListLabel= new JLabel("List of clients");
         clientListPanel.add(clientListLabel);
 
-        ClientTableModel tm = new ClientTableModel(bank.getClients());
+        ClientTableModel tm = new ClientTableModel((ArrayList<Client>) db.getAllClient());
         JTable clientsTable = new JTable(tm);
         add(clientsTable);
         clientsTable.setAutoCreateRowSorter(true);
@@ -48,7 +48,7 @@ public class ManagerMenu extends JFrame {
             if(clientId==-1){
                 JOptionPane.showMessageDialog(new Frame(),"Select client from the list");
             }else{
-                ManagerClientAccountsPage managerClientAccountsPage = new ManagerClientAccountsPage(this.bank.getClients().get(clientId));
+                ManagerClientAccountsPage managerClientAccountsPage = new ManagerClientAccountsPage(db.getAllClient().get(clientId));
             }
         });
         clientActionPanel.add(clientAccountButton);
@@ -59,7 +59,7 @@ public class ManagerMenu extends JFrame {
             if(clientId==-1){
                 JOptionPane.showMessageDialog(new Frame(),"Select client from the list");
             }else{
-                ManagerClientLoanPage managerClientLoanPage = new ManagerClientLoanPage(this.bank.getClients().get(clientId));
+                ManagerClientLoanPage managerClientLoanPage = new ManagerClientLoanPage(db.getAllClient().get(clientId));
             }
         });
         clientActionPanel.add(clientLoanButton);
@@ -70,7 +70,7 @@ public class ManagerMenu extends JFrame {
             if(clientId==-1){
                 JOptionPane.showMessageDialog(new Frame(),"Select client from the list");
             }else{
-                TransactionsListPage transactionsListPage = new TransactionsListPage(this.bank.getClients().get(clientId));
+                TransactionsListPage transactionsListPage = new TransactionsListPage(db.getAllClient().get(clientId));
             }
         });
         clientActionPanel.add(clientTransactionPage);
