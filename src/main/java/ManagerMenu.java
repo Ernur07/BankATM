@@ -76,6 +76,12 @@ public class ManagerMenu extends JFrame {
         clientActionPanel.add(clientTransactionPage);
 
 
+        JButton stockMarket = new JButton("Stock Market");
+        stockMarket.addActionListener(e -> {
+            ChangePricePage changePricePage = new ChangePricePage(this.bank);
+        });
+        clientActionPanel.add(stockMarket);
+
 
         add(clientActionPanel);
 
