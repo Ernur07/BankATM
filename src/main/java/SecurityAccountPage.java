@@ -310,6 +310,7 @@ public class SecurityAccountPage extends JFrame{
                         //Integer stockId = Integer.parseInt((String)stockTable.getValueAt(stockTable.getSelectedRow(), 0));
                         Integer stockId = 1;
 
+                        //buy the share
                         if (!buyShare(bank, client, account, savingAccount, doubleValue, stockId)) {
                             JOptionPane.showMessageDialog(null,
                                     "Transaction failed!",
@@ -350,22 +351,27 @@ public class SecurityAccountPage extends JFrame{
                     int idx = Integer.parseInt(accountName.split(" ")[0]);
                     SavingAccount savingAccount = client.getSavingAccounts().get(idx);
 
-
+                    //get the share to sell
                     String val = (String)sourceList.getSelectedValue();
                     if(val == null){
-                        JOptionPane.showMessageDialog(null,"You need to choose an account first!");
+                        JOptionPane.showMessageDialog(null,"You need to choose a share first!");
                     }else{
                         String[] split = val.split(" ");
                         int shareIdx = Integer.parseInt(split[0]);
                         PrivateShares pShare = account.getShares().get(shareIdx);
+
+                        //try to sell the share
                         if (!sellShare(bank, client, account, savingAccount, pShare, doubleValue)) {
                             JOptionPane.showMessageDialog(null,
                                     "Transaction failed!",
                                     "Error", JOptionPane.ERROR_MESSAGE);
                         }
+
+                        //check if share is 0. if so delete the share
                         if (pShare.getAmountofShares() == 0) {
                             List<PrivateShares> pList = account.getShares();
                             pList.remove(shareIdx);
+                            //TODO. update the db that the share is deleted
                         }
                         this.j.dispose();
                         SecurityAccountPage newPage = new SecurityAccountPage(bank, account, client);
@@ -432,6 +438,8 @@ public class SecurityAccountPage extends JFrame{
         savingAccount.setBalance(savingAccount.getBalance() + earn);
         share.setAmountofShares(Totalamount - amount);
         //db.update(savingAccount);
+        //db.update(share);
+        //db.update(//the stock company share)
 
         return true;
     }
