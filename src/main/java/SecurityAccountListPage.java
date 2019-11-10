@@ -13,6 +13,7 @@ public class SecurityAccountListPage extends JFrame{
         //this.client = new Client("a","b","c","c");
         this.client = c;
 
+
         setLayout(new GridLayout(3,1));
 
         /**
@@ -71,6 +72,10 @@ public class SecurityAccountListPage extends JFrame{
         List<SecurityAccount> list = new ArrayList<>();
         list.add(account);
         client.setSecurityAccounts(list);
+        SavingAccount saccount = new SavingAccount("sav", 1000, 1.0, "USD", client);
+        List<SavingAccount> list2 = new ArrayList<>();
+        list2.add(saccount);
+        client.setSavingAccounts((ArrayList<SavingAccount>) list2);
         Bank bank = new Bank(null, null);
         SecurityAccountListPage page = new SecurityAccountListPage(bank, client);
     }

@@ -7,8 +7,10 @@ import Entities.*;
 import javax.swing.*;
 import java.awt.*;
 import java.math.BigDecimal;
+import java.util.*;
+import java.util.List;
 
-public class SecurityAccountPage {
+public class SecurityAccountPage extends JFrame{
     JFrame j = new JFrame();
 
     GridBagConstraints c = new GridBagConstraints();
@@ -46,8 +48,9 @@ public class SecurityAccountPage {
     //public SecurityAccountPage(){//Bank bank, Client client ){
     public SecurityAccountPage(Bank bank, SecurityAccount account, Client client){
         //TODO: add account list from bank/client
-        accountList = new String[] {"account1", "account2"};
 
+        //accountList = new String[] {"account1", "account2"};
+        accountList = buildSavingAccount(client);
 
 
         fromBox = new JComboBox(accountList);
@@ -125,7 +128,16 @@ public class SecurityAccountPage {
 //            listModel.addElement(String.valueOf(i+1) + " customer name: " + customer.getName() + "accounts: " + customer.listAccounts());
 //        }
 
-        listModel.addElement("temp");
+
+        listModel.setSize(account.getShares().size());
+        for(int i = 0; i < account.getShares().size(); i++){
+            PrivateShares pShare = account.getShares().get(i);
+            listModel.addElement(String.valueOf(i) + " Company: " + pShare.getCompanyName() + " Amount: " + pShare.getAmountofShares() + " Price: " + pShare.getSharePrice());
+
+        }
+
+
+        //listModel.addElement("temp");
         sourceList.setModel(listModel);
         sourceList.setFont(font);
         sourceList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -249,9 +261,12 @@ public class SecurityAccountPage {
         c.gridwidth = 1;
         c.gridx = 5;
         c.gridy = 7;
+        exit.addActionListener(e -> {
+            System.out.println("exit");
+            this.j.dispose();
+        });
         j.add(exit, c);
         listModel.setSize(6);
-
 
 
         j.setVisible(true);
@@ -278,16 +293,31 @@ public class SecurityAccountPage {
                     } else {
                         //get account
                         int currIdx = fromBox.getSelectedIndex()-1;
+                        if (currIdx < 0 || currIdx >= accountList.length) {
+                            JOptionPane.showMessageDialog(null,
+                                    "Please select valid account!",
+                                    "Error", JOptionPane.ERROR_MESSAGE);
+                        }
                         String accountName = accountList[currIdx];
                         System.out.println("selected" + accountName);
-                        //TODO: pick saving account
-                        SavingAccount savingAccount = new SavingAccount();
+                        int idx = Integer.parseInt(accountName.split(" ")[0]);
+                        SavingAccount savingAccount = client.getSavingAccounts().get(idx);
 
                         //find stock
                         int stockIdx = stockTable.getSelectedRow();
-                        Integer stockId = (Integer) stockTable.getValueAt(stockTable.getSelectedRow(), 0);
 
-                        buyShare(bank, client, account, savingAccount, doubleValue, stockId);
+                        //TODO stockID has some error now
+                        //Integer stockId = Integer.parseInt((String)stockTable.getValueAt(stockTable.getSelectedRow(), 0));
+                        Integer stockId = 1;
+
+                        if (!buyShare(bank, client, account, savingAccount, doubleValue, stockId)) {
+                            JOptionPane.showMessageDialog(null,
+                                    "Transaction failed!",
+                                    "Error", JOptionPane.ERROR_MESSAGE);
+                        } else {
+                            this.j.dispose();
+                            SecurityAccountPage newPage = new SecurityAccountPage(bank, account, client);
+                        }
 
                     }
                 }
@@ -295,69 +325,129 @@ public class SecurityAccountPage {
         });
 
 
-//        sell.addActionListener(e -> {
-//            if (stockTable.getSelectedRow() == -1) {
-//                JOptionPane.showMessageDialog(null,
-//                        "No item selected",
-//                        "Error", JOptionPane.ERROR_MESSAGE);
-//            } else {
-//                String value = buyAmount.getText();
-//                if (!isNumeric(value)) {
-//                    JOptionPane.showMessageDialog(null,
-//                            "Input should be numbers!",
-//                            "Error", JOptionPane.ERROR_MESSAGE);
-//                } else {
-//                    double doubleValue = Double.valueOf(value);
-//                    if (doubleValue < 0) {
-//                        JOptionPane.showMessageDialog(null,
-//                                "Input should not less than 0!",
-//                                "Error", JOptionPane.ERROR_MESSAGE);
-//                    } else {
-//                        //get account
-//                        int currIdx = fromBox.getSelectedIndex()-1;
-//                        String accountName = accountList[currIdx];
-//                        System.out.println("selected" + accountName);
-//                        //TODO: pick saving account
-//                        SavingAccount savingAccount = new SavingAccount();
-//
-//                        //find stock
-//                        int stockIdx = stockTable.getSelectedRow();
-//                        Integer stockId = (Integer) stockTable.getValueAt(stockTable.getSelectedRow(), 0);
-//
-//                        buyShare(bank, client, account, savingAccount, doubleValue, stockId);
-//
-//                    }
-//                }
-//            }
-//        });
+        sell.addActionListener(e -> {
+            String value = sellAmount.getText();
+            if (!isNumeric(value)) {
+                JOptionPane.showMessageDialog(null,
+                        "Input should be numbers!",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                double doubleValue = Double.valueOf(value);
+                if (doubleValue < 0) {
+                    JOptionPane.showMessageDialog(null,
+                            "Input should not less than 0!",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    //get account
+                    int currIdx = fromBox2.getSelectedIndex()-1;
+                    if (currIdx < 0 || currIdx >= accountList.length) {
+                        JOptionPane.showMessageDialog(null,
+                                "Please select valid account!",
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                    String accountName = accountList[currIdx];
+                    System.out.println("selected" + accountName);
+                    int idx = Integer.parseInt(accountName.split(" ")[0]);
+                    SavingAccount savingAccount = client.getSavingAccounts().get(idx);
 
 
-    }
+                    String val = (String)sourceList.getSelectedValue();
+                    if(val == null){
+                        JOptionPane.showMessageDialog(null,"You need to choose an account first!");
+                    }else{
+                        String[] split = val.split(" ");
+                        int shareIdx = Integer.parseInt(split[0]);
+                        PrivateShares pShare = account.getShares().get(shareIdx);
+                        if (!sellShare(bank, client, account, savingAccount, pShare, doubleValue)) {
+                            JOptionPane.showMessageDialog(null,
+                                    "Transaction failed!",
+                                    "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                        if (pShare.getAmountofShares() == 0) {
+                            List<PrivateShares> pList = account.getShares();
+                            pList.remove(shareIdx);
+                        }
+                        this.j.dispose();
+                        SecurityAccountPage newPage = new SecurityAccountPage(bank, account, client);
+                    }
+                }
+            }
+
+        });
+
+
+
+
+        }
 
     public boolean buyShare(Bank bank, Client client, SecurityAccount securityAccount, SavingAccount savingAccount, Double value, Integer stockId) {
-        DatabaseManager db = new DatabaseManager();
+        //DatabaseManager db = new DatabaseManager();
 
         //update stock share
-        Shares stockShare = db.findShares(stockId);
+        //TODO: use db, and get stockShare
+        //Shares stockShare = db.findShares(stockId);
+        Shares stockShare = new Shares("TempName", "tickr", 100, 10000);
+
         long amount = Math.round(value);
         if (amount > stockShare.getAmountofShares())
             return false;
         if (savingAccount.getBalance() - amount * stockShare.getSharePrice() < 0)
             return false;
         stockShare.setAmountofShares(stockShare.getAmountofShares() - amount);
-        db.update(stockShare);
+        //db.update(stockShare);
 
         //add new share to sec account
         PrivateShares newShare = new PrivateShares(stockShare.getCompanyName(), stockShare.getTickr(), stockShare.getSharePrice(), amount, stockShare.getSharePrice(), securityAccount);
         securityAccount.addShare(newShare);
-        db.update(securityAccount);
+        //db.update(securityAccount);
 
         //update saving
         savingAccount.setBalance(savingAccount.getBalance() - amount * stockShare.getSharePrice());
-        db.update(savingAccount);
+        //db.update(savingAccount);
 
 
         return true;
+    }
+
+    private boolean sellShare(Bank bank, Client client, SecurityAccount securityAccount, SavingAccount savingAccount, PrivateShares share, Double amount) {
+        //DatabaseManager db = new DatabaseManager();
+
+        //update stock share
+        //TODO: use db, and get stockShare
+        //Shares stockShare = db.findShares(stockId);
+        Shares stockShare = new Shares("TempName", "tickr", 100, 10000);
+
+        int id = share.getId();
+        String companyname = share.getCompanyName();
+        String tickr = share.getTickr();
+        Double price = share.getSharePrice();
+        double Totalamount = share.getAmountofShares();
+        if (amount > Totalamount)
+            return false;
+        //TODO: put the share back to compnay. Difficulty: how to know which share to return?
+
+
+        //put money back to saving account
+        double earn = amount * price;
+        savingAccount.setBalance(savingAccount.getBalance() + earn);
+        share.setAmountofShares(Totalamount - amount);
+        //db.update(savingAccount);
+
+        return true;
+    }
+
+
+
+    private String[] buildSavingAccount(Client client) {
+        List<SavingAccount> list = client.getSavingAccounts();
+        String[] ans = new String[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            SavingAccount account = list.get(i);
+            String s = String.valueOf(i) +" " + account.getName() + " " + account.getId() + " " + account.getBalance();
+            ans[i] = s;
+        }
+        return ans;
+
     }
 
     private boolean isNumeric(String str) {
@@ -372,10 +462,10 @@ public class SecurityAccountPage {
 
 
 
-    public static void main(String[] args) {
-        //SecurityAccountPage page = new SecurityAccountPage();
-
-    }
+//    public static void main(String[] args) {
+//        //SecurityAccountPage page = new SecurityAccountPage();
+//
+//    }
 }
 
 

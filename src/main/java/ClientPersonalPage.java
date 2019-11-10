@@ -19,7 +19,7 @@ public class ClientPersonalPage extends JFrame {
     public ClientPersonalPage(Bank bank, Client client ) throws HeadlessException {
         this.bank=bank;
         this.client=db.findClient(client.getId());
-        setLayout(new GridLayout(5,2));
+        setLayout(new GridLayout(6,2));
 
         JLabel nameLabel = new JLabel("Welcome "+client.getFirstname()+" "+client.getSurname());
         add(nameLabel);
@@ -78,6 +78,13 @@ public class ClientPersonalPage extends JFrame {
             OtherFeePage otherFeePage = new OtherFeePage(this.client);
         });
         add(otherFeePageButton);
+
+        JButton securityButton = new JButton("Manage Security");
+        securityButton.addActionListener(e -> {
+            SecurityAccountListPage page = new SecurityAccountListPage(bank, this.client);
+        });
+        add(securityButton);
+
 
 
         setTitle(this.client.getLogin()+" Personal Page");
