@@ -82,6 +82,12 @@ public class ManagerMenu extends JFrame {
         });
         clientActionPanel.add(stockMarket);
 
+        JButton currency = new JButton("Currency Exchange");
+        currency.addActionListener(e -> {
+            CurrenceyExchangePage currenceyExchangePage = new CurrenceyExchangePage(this.bank);
+        });
+        clientActionPanel.add(stockMarket);
+
 
         add(clientActionPanel);
 
