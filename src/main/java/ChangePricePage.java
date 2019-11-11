@@ -2,6 +2,7 @@ import DatabaseConnection.DatabaseManager;
 import Entities.*;
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -20,6 +21,8 @@ public class ChangePricePage extends JFrame {
     private JTextField priceText;
     private JButton submit;
     private JButton back;
+    private JButton refresh;
+    private JButton addShare;
     private JTable stockTable;
     private JScrollPane sp;
 
@@ -36,6 +39,8 @@ public class ChangePricePage extends JFrame {
         priceLabel.setFont(labelFont2);
         priceText = new JTextField();
         submit = new JButton("Submit");
+        //refresh = new JButton("Refresh");
+        addShare = new JButton("Add Share");
         back = new JButton("Back");
 
         // get all shares from database
@@ -48,6 +53,7 @@ public class ChangePricePage extends JFrame {
 //        shares.add(new Shares("Google", "GOOGL", 1272.50, 1100));
 //        shares.add(new Shares("Uber", "UBER", 31.37, 1500));
 //        shares.add(new Shares("Microsoft", "MSFT", 143.72, 600));
+
         StockMarketTableModel stockMarketTableModel = new StockMarketTableModel(shares);
 
         stockTable = new JTable(stockMarketTableModel);
@@ -60,7 +66,10 @@ public class ChangePricePage extends JFrame {
         priceLabel.setBounds(190, 530, 220, 50);
         priceText.setBounds(275, 530, 110, 50);
         submit.setBounds(395, 530, 110, 50);
-        back.setBounds(190, 590, 315, 50);
+
+        addShare.setBounds(190, 590, 152, 50);
+        //refresh.setBounds(298, 590, 98, 50);
+        back.setBounds(352, 590, 152,50);
 
         // Create the panel to place the buttons on
         JPanel panel = new JPanel();
@@ -72,7 +81,8 @@ public class ChangePricePage extends JFrame {
         panel.add(priceText);
         panel.add(submit);
         panel.add(sp);
-        //panel.add(stockTable);
+        panel.add(addShare);
+        //panel.add(refresh);
         panel.add(back);
 
         // Add the panel to the frame
@@ -85,6 +95,11 @@ public class ChangePricePage extends JFrame {
         setLocation(200,100);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
+
+        addShare.addActionListener(e -> {
+            //System.out.println(stockMarketTableModel.getRowCount());
+            CreateSharesPage createSharesPage = new CreateSharesPage(stockMarketTableModel);
+        });
 
         back.addActionListener(e -> {
             setVisible(false);

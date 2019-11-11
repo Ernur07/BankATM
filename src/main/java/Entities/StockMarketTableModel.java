@@ -68,6 +68,11 @@ public class StockMarketTableModel extends AbstractTableModel {
         }
     }
 
+    public void addShare(Shares newShare) {
+        this.shares.add(newShare);
+        fireTableDataChanged();
+    }
+
     public String getColumnName(int col){
         return this.columnNames[col];
     }
