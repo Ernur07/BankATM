@@ -2,6 +2,7 @@ package DatabaseConnection;
 
 
 import Entities.*;
+import Enums.CurrencyExchangeRate;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -89,6 +90,18 @@ public class DatabaseManager {
     public Transaction findTransaction(Integer id){
         em.getTransaction().begin();
         Transaction result = em.find(Transaction.class,id);
+        em.getTransaction().commit();
+        return result;
+    }
+    public CurrencyExchange findCurrencyExchange(Integer id){
+        em.getTransaction().begin();
+        CurrencyExchange result = em.find(CurrencyExchange.class,id);
+        em.getTransaction().commit();
+        return result;
+    }
+    public Currency findCurrency(Integer id){
+        em.getTransaction().begin();
+        Currency result = em.find(Currency.class,id);
         em.getTransaction().commit();
         return result;
     }
@@ -269,6 +282,30 @@ public class DatabaseManager {
         System.out.println(result);
         return result;
     }
+    public List<CurrencyExchange> getAllCurrencyExchange(){
+        em.getTransaction().begin();
+        /*List<Integer> resultList = (List<Integer>) em.createNativeQuery("SELECT id FROM account WHERE account_type = saving");
+        ArrayList<SavingAccount> result = new ArrayList<>();
+        for(int id: resultList) {
+            result.add(findSavingAccount(id));
+        }*/
+        Query q = em.createQuery("SELECT s FROM CurrencyExchange s");
+        ArrayList<CurrencyExchange> result = new ArrayList<>(q.getResultList());
+        em.getTransaction().commit();
+        return result;
+    }
+    public List<Currency> getAllCurrency(){
+        em.getTransaction().begin();
+        /*List<Integer> resultList = (List<Integer>) em.createNativeQuery("SELECT id FROM account WHERE account_type = saving");
+        ArrayList<SavingAccount> result = new ArrayList<>();
+        for(int id: resultList) {
+            result.add(findSavingAccount(id));
+        }*/
+        Query q = em.createQuery("SELECT s FROM Currency s");
+        ArrayList<Currency> result = new ArrayList<>(q.getResultList());
+        em.getTransaction().commit();
+        return result;
+    }
     public boolean isRegistered(String login, String password){
         em.getTransaction().begin();
         Client result= null;
@@ -313,6 +350,16 @@ public class DatabaseManager {
         em.getTransaction().commit();
         return result;
     }
+
+    public CurrencyExchange findExchangeByCurrencies(Currency c1,Currency c2){
+        em.getTransaction().begin();
+        Query q = em.createQuery("SELECT s FROM CurrencyExchange s WHERE s.currency1 = :c1 AND s.currency2= :c2");
+        q.setParameter("c1",c1).setParameter("c2",c2);
+        CurrencyExchange result = (CurrencyExchange) q.getSingleResult();
+        em.getTransaction().commit();
+        return result;
+    }
+
 
 
     /*public void addClient(Client client){
