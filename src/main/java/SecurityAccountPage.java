@@ -11,6 +11,8 @@ import java.util.*;
 import java.util.List;
 
 public class SecurityAccountPage extends JFrame{
+    DatabaseManager db = new DatabaseManager();
+
     JFrame j = new JFrame();
 
     GridBagConstraints c = new GridBagConstraints();
@@ -79,21 +81,24 @@ public class SecurityAccountPage extends JFrame{
 //        j.add(sp, c);
 
 
-        String[][] data = {
+        /*String[][] data = {
                 { "Apple", "AAPL", "255.82" },
                 { "Tencent", "TCEHY", "41.09" },
                 { "Alibaba", "BABA", "176.46" },
                 { "Google", "GOOGL", "1272.50" },
                 { "Uber", "UBER", "31.37" },
                 { "Microsoft", "MSFT", "143.72" },
-        };
+        };*/
 
         // Column Names
-        String[] columnNames = { "Company", "Code", "Price" };
+        //String[] columnNames = { "Company", "Code", "Price" };
 
         //StockTableModel stockTableModel = new StockTableModel();
 
-        stockTable = new JTable(data, columnNames);
+        ArrayList<Shares> data = (ArrayList<Shares>) db.getAllShares();
+        StockMarketTableModel sm = new StockMarketTableModel(data);
+
+        stockTable = new JTable(sm);
         stockTable.setAutoCreateRowSorter(true);
         stockSp = new JScrollPane(stockTable);
         stockSp.setPreferredSize(new Dimension(150, 250));
@@ -381,6 +386,8 @@ public class SecurityAccountPage extends JFrame{
         //update stock share
         //TOCHECK: get stockShare
         Shares stockShare = db.findShares(stockId);
+        SecurityAccount sec = db.findSecurityAccount(securityAccount.getId());
+        SavingAccount sav = db.findSavingAccount(savingAccount.getId());
         //Shares stockShare = new Shares("TempName", "tickr", 100, 10000);
 
         long amount = Math.round(value);
@@ -392,14 +399,12 @@ public class SecurityAccountPage extends JFrame{
         db.update(stockShare);
 
         //add new share to sec account
-        PrivateShares newShare = new PrivateShares(stockShare.getCompanyName(), stockShare.getTickr(), stockShare.getSharePrice(), amount, stockShare.getSharePrice(), securityAccount);
-        securityAccount.addShare(newShare);
-        db.update(securityAccount);
+        PrivateShares newShare = new PrivateShares(stockShare.getCompanyName(), stockShare.getTickr(), stockShare.getSharePrice(), amount, stockShare.getSharePrice(), sec);
+        db.add(newShare);
 
         //update saving
         savingAccount.setBalance(savingAccount.getBalance() - amount * stockShare.getSharePrice());
         db.update(savingAccount);
-
 
         return true;
     }
@@ -428,7 +433,6 @@ public class SecurityAccountPage extends JFrame{
         share.setAmountofShares(Totalamount - amount);
         db.update(savingAccount);
         db.update(share);
-
         //db.update(//the stock company share)
 
         return true;

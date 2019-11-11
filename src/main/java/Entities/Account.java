@@ -29,13 +29,16 @@ public abstract class Account {
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinColumn(name = "sender_account_id")
     private List<Transaction> transactions;
-    private String currency;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade ={CascadeType.MERGE,CascadeType.DETACH,CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinColumn(name = "currency_id")
+    private Currency currency;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade ={CascadeType.MERGE,CascadeType.DETACH,CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinColumn(name = "client_id")
     private Client owner;
 
-    public Account(String name, int balance, String c,Client owner) {
+    public Account(String name, int balance, Currency c,Client owner) {
         this.name = name;
         this.balance = balance;
         this.transactions = new ArrayList<Transaction>();
@@ -72,11 +75,11 @@ public abstract class Account {
         return transactionFee;
     }
 
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
-    public void setCurrency(String currency) {
+    public void setCurrency(Currency currency) {
         this.currency = currency;
     }
 

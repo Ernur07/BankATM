@@ -15,7 +15,7 @@ public class SavingAccount extends Account {
 
     public SavingAccount(){}
 
-    public SavingAccount(String name, int balance, double interestRate, String currency, Client client) {
+    public SavingAccount(String name, int balance, double interestRate, Currency currency, Client client) {
         super(name, balance,currency,client);
         this.interestRate = interestRate;
     }

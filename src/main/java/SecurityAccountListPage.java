@@ -78,10 +78,6 @@ public class SecurityAccountListPage extends JFrame{
         back.setSize(1,1);
         add(back);
 
-
-
-
-
         setTitle(this.client.getLogin()+" Personal Page");
         setSize(700,700);
         setLocation(200,100);
@@ -89,17 +85,4 @@ public class SecurityAccountListPage extends JFrame{
         setVisible(true);
     }
 
-    public static void main(String[] args) {
-        Client client = new Client();
-        SecurityAccount account = new SecurityAccount("sec", 0, "c", client);
-        List<SecurityAccount> list = new ArrayList<>();
-        list.add(account);
-        client.setSecurityAccounts(list);
-        SavingAccount saccount = new SavingAccount("sav", 1000, 1.0, "USD", client);
-        List<SavingAccount> list2 = new ArrayList<>();
-        list2.add(saccount);
-        client.setSavingAccounts((ArrayList<SavingAccount>) list2);
-        Bank bank = new Bank(null, null);
-        SecurityAccountListPage page = new SecurityAccountListPage(bank, client);
-    }
 }

@@ -13,7 +13,7 @@ public class CheckingAccount extends Account {
 
     public CheckingAccount(){}
 
-    public CheckingAccount(String name, int balance, String currency, Client client) {
+    public CheckingAccount(String name, int balance, Currency currency, Client client) {
         super(name, balance,currency,client);
     }
 

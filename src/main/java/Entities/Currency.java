@@ -40,4 +40,10 @@ public class Currency {
     public String toString() {
         return this.name;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        Currency c2 = (Currency) obj;
+        return this.name.equals(c2.getName());
+    }
 }

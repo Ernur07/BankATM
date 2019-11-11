@@ -92,8 +92,8 @@ public class AccountManagementPage extends JFrame {
         addAccount.add(savingAccount);
         addAccount.add(checkingAccount);
 
-
-        JComboBox currency = new JComboBox(Currencies.values());
+        ArrayList<Currency> currencies = (ArrayList<Currency>) db.getAllCurrency();
+        JComboBox currency = new JComboBox(currencies.toArray());
         addAccount.add(currency);
 
         add(addAccount);
@@ -104,9 +104,9 @@ public class AccountManagementPage extends JFrame {
                 JOptionPane.showMessageDialog(new Frame(),"Wrong input");
             }else{
                 if(this.accountRadioChoice.equals("Checking Account")){
-                    Currencies c = (Currencies) currency.getSelectedItem();
+                    Currency c = (Currency) currency.getSelectedItem();
 
-                    CheckingAccount checkingAccount1 = new CheckingAccount(addAccountTextField.getText(),0,c.getValue(),this.client);
+                    CheckingAccount checkingAccount1 = new CheckingAccount(addAccountTextField.getText(),0,c,this.client);
                     if(this.client.getAllAccounts().contains(checkingAccount1)){
                         JOptionPane.showMessageDialog(new Frame(),"Account with given name is already exited");
                     }else{
@@ -115,8 +115,8 @@ public class AccountManagementPage extends JFrame {
                         JOptionPane.showMessageDialog(new Frame(),"Account successfully created");
                     }
                 }else if(this.accountRadioChoice.equals("Saving Account")){
-                    Currencies c = (Currencies) currency.getSelectedItem();
-                    SavingAccount savingAccount1=new SavingAccount(addAccountTextField.getText(),0,2.5,c.getValue(),this.client);
+                    Currency c = (Currency) currency.getSelectedItem();
+                    SavingAccount savingAccount1=new SavingAccount(addAccountTextField.getText(),0,2.5,c,this.client);
                     if(this.client.getAllAccounts().contains(savingAccount1)){
                         JOptionPane.showMessageDialog(new Frame(),"Account with given name is already exited");
                     }else{

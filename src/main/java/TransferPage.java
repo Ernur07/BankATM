@@ -1,8 +1,5 @@
 import DatabaseConnection.DatabaseManager;
-import Entities.Account;
-import Entities.Bank;
-import Entities.Client;
-import Entities.Transaction;
+import Entities.*;
 import Enums.CurrencyExchangeRate;
 
 import javax.swing.*;
@@ -106,19 +103,14 @@ public class TransferPage extends JFrame {
                         db.update(receiverAccount);
                         JOptionPane.showMessageDialog(new Frame(),"Successful operation ");
                     }else{
-                        for(CurrencyExchangeRate exchangeRate:CurrencyExchangeRate.values()){
-                            if(exchangeRate.getName().equals(temp.getCurrency()+"2"+receiverAccount.getCurrency())){
-                                temp.setBalance(temp.getBalance() - ((1+temp.getTransactionFee())*amount));
-                                db.update(temp);
-                                receiverAccount.setBalance(receiverAccount.getBalance()+ exchangeRate.getRate()*amount);
-                                db.update(receiverAccount);
-                                break;
-                            }
+                        temp.setBalance(temp.getBalance() - ((1+temp.getTransactionFee())*amount));
+                        db.update(temp);
+                        CurrencyExchange ce = (CurrencyExchange) db.findExchangeByCurrencies(temp.getCurrency(),receiverAccount.getCurrency());
+                        receiverAccount.setBalance(receiverAccount.getBalance()+ ce.getExchangeRate()*amount);
+                        db.update(receiverAccount);
                         }
                         JOptionPane.showMessageDialog(new Frame(),"Successful operation ");
                     }
-
-                }
             }catch (Exception ex){
                 JOptionPane.showMessageDialog(new Frame(),"Wrong input. " + ex);
             }

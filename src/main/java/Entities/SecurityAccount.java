@@ -14,7 +14,7 @@ public class SecurityAccount extends Account {
     @JoinColumn(name = "security_account_id")
     private List<PrivateShares> shares;
 
-    public SecurityAccount(String name, int balance, String c, Client owner) {
+    public SecurityAccount(String name, int balance, Currency c, Client owner) {
         super(name, balance, c,owner);
         shares = new ArrayList<PrivateShares>();
     }
