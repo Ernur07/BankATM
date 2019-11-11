@@ -21,7 +21,7 @@ public class SecurityAccountListPage extends JFrame{
          */
         JPanel securityAccountPanel = new JPanel();
         securityAccountPanel.setLayout(new BoxLayout(securityAccountPanel,BoxLayout.Y_AXIS));
-        SecurityAccountTableModel tm = new SecurityAccountTableModel((ArrayList<SecurityAccount>) client.getSecurityAccounts());
+        SecurityAccountTableModel tm = new SecurityAccountTableModel(new ArrayList<SecurityAccount>(client.getSecurityAccounts()));
         JTable savingTable = new JTable(tm);
         add(savingTable);
         savingTable.setAutoCreateRowSorter(true);

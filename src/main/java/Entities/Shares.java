@@ -9,6 +9,7 @@ public class Shares {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private String companyName;
     private String tickr;
     private double sharePrice;
