@@ -1,5 +1,7 @@
 package Entities;
 
+import DatabaseConnection.DatabaseManager;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,10 +28,25 @@ public class SecurityAccount extends Account {
     }
 
     public void setShares(List<PrivateShares> shares) {
+
         this.shares = shares;
+        updateBalance();
     }
 
     public void addShare(PrivateShares share) {
+
         this.shares.add(share);
+        updateBalance();
+    }
+
+    public void updateBalance() {
+        DatabaseManager db = new DatabaseManager();
+        super.setBalance(db.getSecurityAccountBalance(this));
+    }
+
+    @Override
+    public double getBalance() {
+        updateBalance();
+        return super.getBalance();
     }
 }

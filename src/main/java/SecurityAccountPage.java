@@ -413,7 +413,7 @@ public class SecurityAccountPage extends JFrame{
         return true;
     }
 
-    private boolean sellShare(Bank bank, Client client, SecurityAccount securityAccount, SavingAccount savingAccount, PrivateShares share, Double amount) {
+    public boolean sellShare(Bank bank, Client client, SecurityAccount securityAccount, SavingAccount savingAccount, PrivateShares share, Double amount) {
         DatabaseManager db = new DatabaseManager();
 
         //update stock share
