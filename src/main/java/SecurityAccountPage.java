@@ -364,7 +364,10 @@ public class SecurityAccountPage extends JFrame{
                         //check if share is 0. if so delete the share
                         if (pShare.getAmountofShares() == 0) {
                             List<PrivateShares> pList = account.getShares();
+                            db.remove(pShare);
                             pList.remove(shareIdx);
+
+
                             //TODO. update the db that the share is deleted
                         }
                         this.j.dispose();
@@ -400,6 +403,7 @@ public class SecurityAccountPage extends JFrame{
 
         //add new share to sec account
         PrivateShares newShare = new PrivateShares(stockShare.getCompanyName(), stockShare.getTickr(), stockShare.getSharePrice(), amount, stockShare.getSharePrice(), sec);
+        securityAccount.addShare(newShare);
         db.add(newShare);
 
         //update saving

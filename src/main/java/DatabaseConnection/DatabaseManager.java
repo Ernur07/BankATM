@@ -257,9 +257,15 @@ public class DatabaseManager {
             result.add(findShares(id));
         }*/
         Query q = em.createQuery("SELECT s FROM Shares s");
-        ArrayList<Shares> result = new ArrayList<Shares>(q.getResultList());
+        ArrayList<Shares> temp = new ArrayList<Shares>(q.getResultList());
+        for(int i =0;i<temp.size();i++){
+            if(temp.get(i) instanceof PrivateShares){
+                temp.remove(i);
+                i--;
+            }
+        }
         em.getTransaction().commit();
-        return result;
+        return temp;
     }
     public List<PrivateShares> getAllPrivateShares(){
         em.getTransaction().begin();
