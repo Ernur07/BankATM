@@ -387,6 +387,15 @@ public class DatabaseManager {
         return sum;
     }
 
+    public double getSecurityAccountBalance(SecurityAccount c){
+        ArrayList<PrivateShares> shares = (ArrayList<PrivateShares>) this.getPrivateShares(c);
+        double sum =0;
+        for(PrivateShares acc : shares){
+            sum+=acc.getBoughtPrice();
+        }
+        return sum;
+    }
+
 
 
     /*public void addClient(Client client){
