@@ -134,6 +134,7 @@ public class ChangePricePage extends JFrame {
                         Shares share = db.findShares(id);
                         share.setSharePrice(doubleValue);
                         db.update(share);
+                        db.updatePrivateShares(share);
                     }
                 }
             }

@@ -195,7 +195,7 @@ public class DatabaseManager {
         }*/
         Query q = em.createQuery("SELECT s FROM PrivateShares s WHERE s.securityAccount.id= :id");
         q.setParameter("id",account.getId());
-        ArrayList<PrivateShares> result = (ArrayList<PrivateShares>) q.getResultList();
+        ArrayList<PrivateShares> result = new ArrayList<>(q.getResultList());
         em.getTransaction().commit();
         return result;
     }
@@ -394,6 +394,18 @@ public class DatabaseManager {
             sum+=acc.getBoughtPrice();
         }
         return sum;
+    }
+
+    public void updatePrivateShares(Shares share){
+        em.getTransaction().begin();
+        Query q = em.createQuery("SELECT s FROM PrivateShares s WHERE s.tickr = :tic");
+        q.setParameter("tic",share.getTickr());
+        ArrayList<PrivateShares> temp = new ArrayList<>(q.getResultList());
+        em.getTransaction().commit();
+        for(PrivateShares t : temp){
+            t.setSharePrice(share.getSharePrice());
+            this.update(t);
+        }
     }
 
 
