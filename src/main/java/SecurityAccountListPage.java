@@ -20,16 +20,34 @@ public class SecurityAccountListPage extends JFrame{
          * Security accounts list
          */
         JPanel securityAccountPanel = new JPanel();
-        securityAccountPanel.setLayout(new BoxLayout(securityAccountPanel,BoxLayout.Y_AXIS));
-        SecurityAccountTableModel tm = new SecurityAccountTableModel((ArrayList<SecurityAccount>) client.getSecurityAccounts());
-        JTable savingTable = new JTable(tm);
-        add(savingTable);
-        savingTable.setAutoCreateRowSorter(true);
-        JScrollPane scrollPane = new JScrollPane(savingTable);
-        scrollPane.setPreferredSize(new Dimension(380,280));
-        securityAccountPanel.add(new JLabel(this.client.getLogin()+"'s Security Accounts"));
-        securityAccountPanel.add(scrollPane);
-        add(securityAccountPanel);
+//        securityAccountPanel.setLayout(new BoxLayout(securityAccountPanel,BoxLayout.Y_AXIS));
+//        SecurityAccountTableModel tm = new SecurityAccountTableModel((ArrayList<SecurityAccount>) client.getSecurityAccounts());
+//        JTable savingTable = new JTable(tm);
+//        add(savingTable);
+//        savingTable.setAutoCreateRowSorter(true);
+//        JScrollPane scrollPane = new JScrollPane(savingTable);
+//        scrollPane.setPreferredSize(new Dimension(380,280));
+//        securityAccountPanel.add(new JLabel(this.client.getLogin()+"'s Security Accounts"));
+//        securityAccountPanel.add(scrollPane);
+//        add(securityAccountPanel);
+
+        DefaultListModel listModel = new DefaultListModel();
+        JList sourceList = new JList();
+        listModel.setSize(client.getSecurityAccounts().size());
+        for(int i = 0; i < client.getSecurityAccounts().size(); i++){
+            SecurityAccount account = client.getSecurityAccounts().get(i);
+            listModel.addElement(String.valueOf(i) + " Security Account name: " + account.getName() + " Id: " + account.getId() + " Balance: " + account.getBalance());
+
+        }
+        sourceList.setModel(listModel);
+        sourceList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        JScrollPane sourceListScroller = new JScrollPane(sourceList);
+        sourceListScroller.setPreferredSize(new Dimension(380,280));
+        sourceListScroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        add(sourceListScroller);
+
+
+
 
         /**
          * Manage button
@@ -37,10 +55,15 @@ public class SecurityAccountListPage extends JFrame{
         JButton manage = new JButton("Manage");
         manage.addActionListener(e ->{
 
-            //TODO
-            //pick the account
-            SecurityAccount account = client.getSecurityAccounts().get(0);
-            new SecurityAccountPage(bank, account, client);
+            String val = (String)sourceList.getSelectedValue();
+            if(val == null){
+                JOptionPane.showMessageDialog(null,"You need to choose a share first!");
+            }else {
+                String[] split = val.split(" ");
+                int accountIdx = Integer.parseInt(split[0]);
+                SecurityAccount account = client.getSecurityAccounts().get(accountIdx);
+                new SecurityAccountPage(bank, account, client);
+            }
         });
         manage.setSize(1,1);
         add(manage);

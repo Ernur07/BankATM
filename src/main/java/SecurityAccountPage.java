@@ -108,21 +108,6 @@ public class SecurityAccountPage extends JFrame{
         j.add(stockSp, c);
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //        for (int i = 0; i < bankATM.getCustomers().size(); i++) {
 //            Customer customer = bankATM.getCustomers().get(i);
 //            listModel.addElement(String.valueOf(i+1) + " customer name: " + customer.getName() + "accounts: " + customer.listAccounts());
@@ -306,9 +291,13 @@ public class SecurityAccountPage extends JFrame{
                         //find stock
                         int stockIdx = stockTable.getSelectedRow();
 
-                        //TODO stockID has some error now
+
                         //Integer stockId = Integer.parseInt((String)stockTable.getValueAt(stockTable.getSelectedRow(), 0));
-                        Integer stockId = 1;
+                        //Integer stockId = 1;
+
+                        //This line not checked yet -> may have error
+                        Integer stockId = (Integer) stockTable.getValueAt(stockTable.getSelectedRow(), 0);
+
 
                         //buy the share
                         if (!buyShare(bank, client, account, savingAccount, doubleValue, stockId)) {
@@ -387,12 +376,12 @@ public class SecurityAccountPage extends JFrame{
         }
 
     public boolean buyShare(Bank bank, Client client, SecurityAccount securityAccount, SavingAccount savingAccount, Double value, Integer stockId) {
-        //DatabaseManager db = new DatabaseManager();
+        DatabaseManager db = new DatabaseManager();
 
         //update stock share
-        //TODO: use db, and get stockShare
-        //Shares stockShare = db.findShares(stockId);
-        Shares stockShare = new Shares("TempName", "tickr", 100, 10000);
+        //TOCHECK: get stockShare
+        Shares stockShare = db.findShares(stockId);
+        //Shares stockShare = new Shares("TempName", "tickr", 100, 10000);
 
         long amount = Math.round(value);
         if (amount > stockShare.getAmountofShares())
@@ -400,23 +389,23 @@ public class SecurityAccountPage extends JFrame{
         if (savingAccount.getBalance() - amount * stockShare.getSharePrice() < 0)
             return false;
         stockShare.setAmountofShares(stockShare.getAmountofShares() - amount);
-        //db.update(stockShare);
+        db.update(stockShare);
 
         //add new share to sec account
         PrivateShares newShare = new PrivateShares(stockShare.getCompanyName(), stockShare.getTickr(), stockShare.getSharePrice(), amount, stockShare.getSharePrice(), securityAccount);
         securityAccount.addShare(newShare);
-        //db.update(securityAccount);
+        db.update(securityAccount);
 
         //update saving
         savingAccount.setBalance(savingAccount.getBalance() - amount * stockShare.getSharePrice());
-        //db.update(savingAccount);
+        db.update(savingAccount);
 
 
         return true;
     }
 
     private boolean sellShare(Bank bank, Client client, SecurityAccount securityAccount, SavingAccount savingAccount, PrivateShares share, Double amount) {
-        //DatabaseManager db = new DatabaseManager();
+        DatabaseManager db = new DatabaseManager();
 
         //update stock share
         //TODO: use db, and get stockShare
@@ -437,8 +426,9 @@ public class SecurityAccountPage extends JFrame{
         double earn = amount * price;
         savingAccount.setBalance(savingAccount.getBalance() + earn);
         share.setAmountofShares(Totalamount - amount);
-        //db.update(savingAccount);
-        //db.update(share);
+        db.update(savingAccount);
+        db.update(share);
+
         //db.update(//the stock company share)
 
         return true;
