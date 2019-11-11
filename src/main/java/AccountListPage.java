@@ -1,6 +1,8 @@
+import DatabaseConnection.DatabaseManager;
 import Entities.*;
 
 import javax.swing.*;
+import javax.xml.crypto.Data;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -9,6 +11,8 @@ import java.util.ArrayList;
  */
 public class AccountListPage extends JFrame {
     private Client client;
+
+    private DatabaseManager db = new DatabaseManager();
 
     public AccountListPage(Client client){
         this.client = client;
@@ -30,7 +34,7 @@ public class AccountListPage extends JFrame {
          */
         JPanel savingAccountPanel = new JPanel();
         savingAccountPanel.setLayout(new BoxLayout(savingAccountPanel,BoxLayout.Y_AXIS));
-        SavingAccountTableModel tm = new SavingAccountTableModel(new ArrayList<SavingAccount>(client.getSavingAccounts()));
+        SavingAccountTableModel tm = new SavingAccountTableModel(new ArrayList<SavingAccount>(db.getSavingAccounts(this.client)));
         JTable savingTable = new JTable(tm);
         add(savingTable);
         savingTable.setAutoCreateRowSorter(true);
@@ -45,7 +49,7 @@ public class AccountListPage extends JFrame {
          */
         JPanel checkingAccountPanel = new JPanel();
         checkingAccountPanel.setLayout(new BoxLayout(checkingAccountPanel,BoxLayout.Y_AXIS));
-        CheckingAccountTableModel tm2 = new CheckingAccountTableModel(new ArrayList<CheckingAccount> (client.getCheckingAccounts()));
+        CheckingAccountTableModel tm2 = new CheckingAccountTableModel(new ArrayList<CheckingAccount> (db.getCheckingAccounts(this.client)));
         JTable checkingTable = new JTable(tm2);
         add(checkingTable);
         checkingTable.setAutoCreateRowSorter(true);

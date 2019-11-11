@@ -86,11 +86,17 @@ public class AccountManagementPage extends JFrame {
         savingAccount.addActionListener(e -> {
             this.accountRadioChoice="Saving Account";
         });
+        JRadioButton securityAccount = new JRadioButton("Security Account");
+        securityAccount.addActionListener(e -> {
+            this.accountRadioChoice="Security Account";
+        });
         ButtonGroup accountType = new ButtonGroup();
         accountType.add(savingAccount);
         accountType.add(checkingAccount);
+        accountType.add(securityAccount);
         addAccount.add(savingAccount);
         addAccount.add(checkingAccount);
+        addAccount.add(securityAccount);
 
         ArrayList<Currency> currencies = (ArrayList<Currency>) db.getAllCurrency();
         JComboBox currency = new JComboBox(currencies.toArray());
@@ -122,6 +128,20 @@ public class AccountManagementPage extends JFrame {
                     }else{
                         this.client.getSavingAccounts().add(savingAccount1);
                         db.add(savingAccount1);
+                        JOptionPane.showMessageDialog(new Frame(),"Account successfully created");
+                    }
+                }else if(this.accountRadioChoice.equals("Security Account")){
+                    Currency c = (Currency) currency.getSelectedItem();
+                    System.out.println();
+                    SecurityAccount securityAccount1 = new SecurityAccount(addAccountTextField.getText(),0,c,this.client);
+                    if(this.client.getAllAccounts().contains(securityAccount1)){
+                        JOptionPane.showMessageDialog(new Frame(),"Account with given name is already exited");
+                    }else if(db.getUsersBalance(this.client)<SecurityAccount.minimumBalance){
+                        JOptionPane.showMessageDialog(new Frame(),"Your balance is low for creating SecurityAccount");
+                    }
+                    else{
+                        this.client.getSecurityAccounts().add(securityAccount1);
+                        db.add(securityAccount1);
                         JOptionPane.showMessageDialog(new Frame(),"Account successfully created");
                     }
                 }

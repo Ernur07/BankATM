@@ -109,37 +109,46 @@ public class DatabaseManager {
 
     public List<SavingAccount> getSavingAccounts(Client client){
         em.getTransaction().begin();
-        Query q = em.createNativeQuery("SELECT id FROM account WHERE client_id = ? and account_type= ?");
+        /*Query q = em.createNativeQuery("SELECT id FROM account WHERE client_id = ? and account_type= ?");
         q.setParameter(1,client.getId()).setParameter(2,"saving");
         List<Integer> resultList = q.getResultList();
         ArrayList<SavingAccount> result = new ArrayList<>();
         for(Integer id: resultList) {
             result.add(findSavingAccount(id));
-        }
+        }*/
+        Query q = em.createQuery("SELECT s FROM SavingAccount s WHERE s.owner = :client");
+        q.setParameter("client",client);
+        ArrayList<SavingAccount> result = new ArrayList<>(q.getResultList()) ;
         em.getTransaction().commit();
         return result;
     }
     public List<CheckingAccount> getCheckingAccounts(Client client){
         em.getTransaction().begin();
-        Query q = em.createNativeQuery("SELECT id FROM account WHERE client_id= ? AND account_type = ?");
+        /*Query q = em.createNativeQuery("SELECT id FROM account WHERE client_id= ? AND account_type = ?");
         q.setParameter(1,client.getId()).setParameter(2,"checking");
         List<Integer> resultList = q.getResultList();
         ArrayList<CheckingAccount> result = new ArrayList<>();
         for(int id: resultList) {
             result.add(findCheckingAccount(id));
-        }
+        }*/
+        Query q = em.createQuery("SELECT s FROM CheckingAccount s WHERE s.owner = :client");
+        q.setParameter("client",client);
+        ArrayList<CheckingAccount> result = new ArrayList<>(q.getResultList()) ;
         em.getTransaction().commit();
         return result;
     }
     public List<SecurityAccount> getSecurityAccount(Client client){
         em.getTransaction().begin();
-        Query q = em.createNativeQuery("SELECT id FROM account WHERE client_id= ? AND account_type = ?");
+        /*Query q = em.createNativeQuery("SELECT id FROM account WHERE client_id= ? AND account_type = ?");
         q.setParameter(1,client.getId()).setParameter(2,"security");
         List<Integer> resultList = q.getResultList();
         ArrayList<SecurityAccount> result = new ArrayList<>();
         for(int id: resultList) {
             result.add(findSecurityAccount(id));
-        }
+        }*/
+        Query q = em.createQuery("SELECT s FROM SecurityAccount s WHERE s.owner = :client");
+        q.setParameter("client",client);
+        ArrayList<SecurityAccount> result = new ArrayList<>(q.getResultList()) ;
         em.getTransaction().commit();
         return result;
     }
@@ -152,12 +161,15 @@ public class DatabaseManager {
         for(int id: resultList) {
             result.add(findLoan(id));
         }*/
-        Query q = em.createQuery("SELECT l FROM Loan l WHERE l.owner= :id");
+        /*Query q = em.createQuery("SELECT l FROM Loan l WHERE l.owner= :id");
         q.setParameter("id",client);
         ArrayList<Loan> result = new ArrayList<Loan> (q.getResultList());
         for (Loan l:result) {
             System.out.println(l.getTotalPayment());
-        }
+        }*/
+        Query q = em.createQuery("SELECT s FROM Loan s WHERE s.owner = :client");
+        q.setParameter("client",client);
+        ArrayList<Loan> result = new ArrayList<>(q.getResultList()) ;
         em.getTransaction().commit();
         return result;
     }
@@ -358,6 +370,15 @@ public class DatabaseManager {
         CurrencyExchange result = (CurrencyExchange) q.getSingleResult();
         em.getTransaction().commit();
         return result;
+    }
+
+    public double getUsersBalance(Client c){
+        ArrayList<SavingAccount> accounts = (ArrayList<SavingAccount>) this.getSavingAccounts(c);
+        double sum =0;
+        for(SavingAccount acc : accounts){
+            sum+=acc.getBalance();
+        }
+        return sum;
     }
 
 

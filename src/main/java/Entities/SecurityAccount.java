@@ -8,7 +8,7 @@ import java.util.List;
 @DiscriminatorValue("security")
 public class SecurityAccount extends Account {
 
-    private static final double minimumBalance = 100000;
+    public static final double minimumBalance = 100000;
 
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinColumn(name = "security_account_id")
