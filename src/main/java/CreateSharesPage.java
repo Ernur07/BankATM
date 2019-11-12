@@ -142,7 +142,4 @@ public class CreateSharesPage extends JFrame {
         return true;
     }
 
-    public static void main(String[] args) {
-        CreateSharesPage createSharesPage = new CreateSharesPage(new StockMarketTableModel(new ArrayList<>()));
-    }
 }

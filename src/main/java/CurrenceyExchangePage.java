@@ -1,6 +1,5 @@
 import DatabaseConnection.DatabaseManager;
 import Entities.*;
-import Enums.CurrencyExchangeRate;
 
 import javax.swing.*;
 import java.awt.*;
@@ -171,9 +170,5 @@ public class CurrenceyExchangePage extends JFrame {
             return false;
         }
         return true;
-    }
-    public static void main(String[] args) {
-        CurrenceyExchangePage changePricePage = new CurrenceyExchangePage(new Bank(
-                new Manager("", "", "",""), new ArrayList<Client>()));
     }
 }

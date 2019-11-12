@@ -151,9 +151,5 @@ public class ChangePricePage extends JFrame {
         return true;
     }
 
-    public static void main(String[] args) {
-        ChangePricePage changePricePage = new ChangePricePage(new Bank(
-                new Manager("", "", "",""), new ArrayList<Client>()));
-    }
 
 }
