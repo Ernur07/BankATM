@@ -30,7 +30,7 @@ public class Loan {
         this.numberOfYears = numberOfYears;
         this.loanAmount = loanAmount;
         loanDate = new Date();
-        this.totalPayment = this.getTotalPayment();
+        this.totalPayment = this.getTotalPayment1();
         this.owner=owner;
     }
     public Loan(int numberOfYears,
@@ -72,7 +72,7 @@ public class Loan {
                 (Math.pow(1 / (1 + monthlyInterestRate), numberOfYears * 12)));
     }
 
-    public double getTotalPayment() {
+    public double getTotalPayment1() {
         return getMonthlyPayment() * numberOfYears * 12;
     }
 
@@ -86,6 +86,10 @@ public class Loan {
 
     public void setTotalPayment(double totalPayment) {
         this.totalPayment = totalPayment;
+    }
+
+    public double getTotalPayment() {
+        return this.totalPayment;
     }
 
     public int getId() {
@@ -103,4 +107,5 @@ public class Loan {
     public void setOwner(Client owner) {
         this.owner = owner;
     }
+
 }

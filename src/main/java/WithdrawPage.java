@@ -17,7 +17,7 @@ public class WithdrawPage extends JFrame {
     private DatabaseManager db=new DatabaseManager();
 
     public WithdrawPage(Client client) throws HeadlessException {
-        this.client=client;
+        this.client=db.findClient(client.getId());
 
         setLayout(new GridLayout(2,2));
         add(new JPanel());

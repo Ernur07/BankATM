@@ -138,13 +138,13 @@ public class CurrenceyExchangePage extends JFrame {
         addButton.addActionListener(e -> {
             ArrayList<Currency> currencies = (ArrayList<Currency>) db.getAllCurrency();
             String currencyName = addText.getText();
-            if(currencyName.equals("")){
-                JOptionPane.showMessageDialog(null,"Wrong inout");
+            if(currencyName.equals("")||!db.currencyNameCheck(currencyName)){
+                JOptionPane.showMessageDialog(null,"Wrong input");
             }else{
+
                 Currency newCurrency= new Currency(currencyName);
                 if(currencies.size() == 0){
                     db.add(newCurrency);
-
                 }else{
                     System.out.println(newCurrency.getId());
                     db.add(newCurrency);
@@ -153,6 +153,7 @@ public class CurrenceyExchangePage extends JFrame {
                         CurrencyExchange c2 =  new CurrencyExchange(curr,newCurrency,0);
                         db.add(c1);
                         db.add(c2);
+                        JOptionPane.showMessageDialog(null,"Currency successfully added");
                     }
 
                 }

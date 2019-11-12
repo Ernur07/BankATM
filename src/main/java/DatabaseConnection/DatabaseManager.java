@@ -391,8 +391,9 @@ public class DatabaseManager {
         ArrayList<PrivateShares> shares = (ArrayList<PrivateShares>) this.getPrivateShares(c);
         double sum =0;
         for(PrivateShares acc : shares){
-            sum+=acc.getBoughtPrice();
+            sum+=acc.getSharePrice();
         }
+        System.out.println(sum);
         return sum;
     }
 
@@ -406,6 +407,20 @@ public class DatabaseManager {
             t.setSharePrice(share.getSharePrice());
             this.update(t);
         }
+    }
+
+    public boolean currencyNameCheck(String s){
+        em.getTransaction().begin();
+        Query q = em.createQuery("SELECT s FROM Currency s WHERE s.name = :name");
+        q.setParameter("name",s);
+        if(q.getResultList().isEmpty()){
+            em.getTransaction().commit();
+            return true;
+        }else{
+            em.getTransaction().commit();
+            return false;
+        }
+
     }
 
 

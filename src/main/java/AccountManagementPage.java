@@ -65,6 +65,7 @@ public class AccountManagementPage extends JFrame {
             }else{
                 JOptionPane.showMessageDialog(new Frame(),"Wrong input");
             }
+
         });
         add(deleteButton);
 
@@ -119,6 +120,8 @@ public class AccountManagementPage extends JFrame {
                         this.client.getCheckingAccounts().add(checkingAccount1);
                         db.add(checkingAccount1);
                         JOptionPane.showMessageDialog(new Frame(),"Account successfully created");
+                        accountsComboBox.addItem(checkingAccount1);
+                        accountsComboBox.repaint();
                     }
                 }else if(this.accountRadioChoice.equals("Saving Account")){
                     Currency c = (Currency) currency.getSelectedItem();
@@ -129,6 +132,8 @@ public class AccountManagementPage extends JFrame {
                         this.client.getSavingAccounts().add(savingAccount1);
                         db.add(savingAccount1);
                         JOptionPane.showMessageDialog(new Frame(),"Account successfully created");
+                        accountsComboBox.addItem(savingAccount1);
+                        accountsComboBox.repaint();
                     }
                 }else if(this.accountRadioChoice.equals("Security Account")){
                     Currency c = (Currency) currency.getSelectedItem();
@@ -143,6 +148,8 @@ public class AccountManagementPage extends JFrame {
                         this.client.getSecurityAccounts().add(securityAccount1);
                         db.add(securityAccount1);
                         JOptionPane.showMessageDialog(new Frame(),"Account successfully created");
+                        accountsComboBox.addItem(securityAccount1);
+                        accountsComboBox.repaint();
                     }
                 }
                 this.client.setOtherFee(this.client.getOtherFee()+Account.getAccountOpeningFee());

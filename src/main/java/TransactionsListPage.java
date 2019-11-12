@@ -1,3 +1,4 @@
+import DatabaseConnection.DatabaseManager;
 import Entities.CheckingAccountTableModel;
 import Entities.Client;
 import Entities.SavingAccountTableModel;
@@ -11,9 +12,10 @@ import java.awt.*;
  */
 public class TransactionsListPage extends JFrame {
     private Client client;
+    private DatabaseManager db= new DatabaseManager();
 
     public TransactionsListPage(Client client){
-        this.client=client;
+        this.client=db.findClient(client.getId());
 
 
         setLayout(new GridLayout(2,1));
