@@ -422,6 +422,19 @@ public class DatabaseManager {
         }
 
     }
+    public boolean shareNameCheck(String s){
+        em.getTransaction().begin();
+        Query q = em.createQuery("SELECT s FROM Shares s WHERE s.tickr = :name");
+        q.setParameter("name",s);
+        if(q.getResultList().isEmpty()){
+            em.getTransaction().commit();
+            return true;
+        }else{
+            em.getTransaction().commit();
+            return false;
+        }
+
+    }
 
 
 

@@ -95,7 +95,12 @@ public class CreateSharesPage extends JFrame {
                 JOptionPane.showMessageDialog(null,
                         "Input should not be empty!.",
                         "Error", JOptionPane.ERROR_MESSAGE);
-            } else {
+            }else if(!db.shareNameCheck(companyCodeText.getText())){
+                JOptionPane.showMessageDialog(null,
+                        "Company with this name is already existed",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            else {
                 String value = priceText.getText();
                 if (!isNumeric(value)) {
                     JOptionPane.showMessageDialog(null,
