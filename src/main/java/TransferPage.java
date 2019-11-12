@@ -1,6 +1,5 @@
 import DatabaseConnection.DatabaseManager;
 import Entities.*;
-import Enums.CurrencyExchangeRate;
 
 import javax.swing.*;
 import java.awt.*;

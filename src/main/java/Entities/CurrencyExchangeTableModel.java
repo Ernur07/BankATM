@@ -3,6 +3,9 @@ package Entities;
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 
+/**
+ * Class, which is used to crate reliable JTable in GUI
+ */
 public class CurrencyExchangeTableModel extends AbstractTableModel {
     private String[] columnNames={"ID","Currency 1","Currency 2","Exchange Rate"};
     private ArrayList<CurrencyExchange> currencyExchanges;

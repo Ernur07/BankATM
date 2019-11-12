@@ -7,6 +7,9 @@ import java.awt.event.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
+/**
+ * This swing class is used to create share in the stock market
+ */
 public class CreateSharesPage extends JFrame {
     private DatabaseManager db;
     private JLabel companyName;

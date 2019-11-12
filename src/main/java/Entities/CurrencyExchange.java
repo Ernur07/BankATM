@@ -2,6 +2,9 @@ package Entities;
 
 import javax.persistence.*;
 
+/**
+ * Through this entity bank shows exchange rate between currencies
+ */
 @Entity
 public class CurrencyExchange {
     @Id
