@@ -6,6 +6,10 @@ import java.awt.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
+
+/**
+ * This window is used to add new currencies and exchange rate of these currencies
+ */
 public class CurrenceyExchangePage extends JFrame {
     private Bank bank;
     private ArrayList<CurrencyExchange> exchange;

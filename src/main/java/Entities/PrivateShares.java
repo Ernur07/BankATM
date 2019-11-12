@@ -2,6 +2,9 @@ package Entities;
 
 import javax.persistence.*;
 
+/**
+ * Class, which represents client's bought shares
+ */
 @Entity
 public class PrivateShares extends Shares {
 

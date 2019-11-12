@@ -2,6 +2,9 @@ package Entities;
 
 import javax.persistence.*;
 
+/**
+ * Class which represents shares in the sock market
+ */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Shares {

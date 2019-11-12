@@ -6,6 +6,9 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class represents security account of the client. It extended from Account class
+ */
 @Entity
 @DiscriminatorValue("security")
 public class SecurityAccount extends Account {
